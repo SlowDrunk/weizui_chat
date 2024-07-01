@@ -1,0 +1,37 @@
+{
+    "login": {
+        "signUp": {
+            "signUpTitle": "Welcome Back",
+            "username": "Username",
+            "usernamePlaceholder": "Please enter username",
+            "passwordPlaceholder": "Please enter password",
+            "password": "Password",
+            "signin": "Sign In"
+        },
+        "register": {
+            "registerTitle": "Create an Account",
+            "username": "Username",
+            "email": "Email",
+            "emailPlaceholder": "Please enter email",
+            "usernamePlaceholder": "Please enter username",
+            "passwordPlaceholder": "Please enter password",
+            "password": "Password",
+            "signin": "Sign Up",
+            "uploadImg": "Upload Avatar"
+        }
+    },
+    "userList": {
+        "searchPlaceholder": "Search"
+    },
+    "chat": {
+        "sendBtn": "Send",
+        "sendPlaceholder": "Please enter..."
+    },
+    "userInfo": {
+        "chatSetting": "Settings",
+        "privacyPolicy": "Privacy Policy",
+        "sharedImg": "Shared Images",
+        "sharedFile": "Shared Files",
+        "loginOut": "Log Out"
+    }
+}

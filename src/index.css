@@ -1,0 +1,48 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+		"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+body {
+	background-image: url("/bg.jpg");
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	color: #fff;
+}
+
+/* 针对Webkit内核的浏览器 (如Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+	display: none;
+}
+
+::-webkit-scrollbar-track {
+	display: none;
+}
+
+::-webkit-scrollbar-thumb {
+	display: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	display: none;
+}
+
+/* 针对Firefox */
+html {
+	scrollbar-width: thin; /* 滚动条宽度 */
+	scrollbar-color: rgba(0,0,0,0) rgba(0,0,0,0); /* 滑块和轨道的颜色 */
+}
+
+.container {
+	width: 80vw;
+	height: 90vh;
+	border-radius: 12px;
+	background-color: rgb(17, 25, 40, 0.75);
+	backdrop-filter: blur(19px) saturate(180%);
+	border: 1px solid rgb(255, 255, 255, 0.12);
+	display: flex;
+}

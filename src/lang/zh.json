@@ -1,0 +1,37 @@
+{
+    "login": {
+        "signUp": {
+            "singUpTitle": "欢迎回来",
+            "username": "用户名",
+            "usernamePlaceholder": "请输入用户名",
+            "passwordPlaceholder": "请输入密码",
+            "password": "密码",
+            "signin": "登录"
+        },
+        "register": {
+            "registerTitle": "创建一个账号",
+            "username": "用户名",
+            "email": "邮箱",
+            "emailPlaceholder": "请输入邮箱",
+            "usernamePlaceholder": "请输入用户名",
+            "passwordPlaceholder": "请输入密码",
+            "password": "密码",
+            "signin": "注册",
+            "uploadImg":"上传头像"
+        }
+    },
+    "userList":{
+        "searchPlaceholder":"搜索"
+    },
+    "chat":{
+        "sendBtn":"发送",
+        "sendPlaceholder":"请输入..."
+    },
+    "userInfo":{
+        "chatSeting":"设置",
+        "privacyPolicy": "隐私政策",
+        "sharedImg":"分享图片",
+        "sharedFile":"分享文件",
+        "loginOut":"退出登陆"
+    }
+}
