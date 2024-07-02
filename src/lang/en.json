@@ -1,12 +1,13 @@
 {
     "login": {
         "signUp": {
-            "signUpTitle": "Welcome Back",
+            "singUpTitle": "Welcome Back",
             "username": "Username",
             "usernamePlaceholder": "Please enter username",
             "passwordPlaceholder": "Please enter password",
             "password": "Password",
-            "signin": "Sign In"
+            "signin": "Sign In",
+            "loginMessage":"Login successful, welcome back!"
         },
         "register": {
             "registerTitle": "Create an Account",
@@ -16,10 +17,15 @@
             "usernamePlaceholder": "Please enter username",
             "passwordPlaceholder": "Please enter password",
             "password": "Password",
-            "signin": "Sign Up",
-            "uploadImg": "Upload Avatar"
+            "signin": "Register",
+            "uploadImg":"Upload Avatar",
+            "registerMessage":"Registration successful, you can now log in!",
+            "passwordError":"Password can only contain numbers, letters, and special characters '!@#&?'.",
+            "emailError":"Invalid email format, please check and re-enter",
+            "uploadError":"You still need a nice avatar~"
         }
     },
+    "loading": "Loading...",
     "userList": {
         "searchPlaceholder": "Search"
     },
@@ -28,10 +34,11 @@
         "sendPlaceholder": "Please enter..."
     },
     "userInfo": {
-        "chatSetting": "Settings",
+        "chatSeting": "Settings",
         "privacyPolicy": "Privacy Policy",
         "sharedImg": "Shared Images",
         "sharedFile": "Shared Files",
         "loginOut": "Log Out"
-    }
+    },
+    "uploadError": "Oh, something went wrong~"
 }

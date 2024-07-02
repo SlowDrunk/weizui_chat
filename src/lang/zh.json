@@ -6,7 +6,8 @@
             "usernamePlaceholder": "请输入用户名",
             "passwordPlaceholder": "请输入密码",
             "password": "密码",
-            "signin": "登录"
+            "signin": "登录",
+            "loginMessage":"登录成功，欢迎回来！"
         },
         "register": {
             "registerTitle": "创建一个账号",
@@ -17,9 +18,14 @@
             "passwordPlaceholder": "请输入密码",
             "password": "密码",
             "signin": "注册",
-            "uploadImg":"上传头像"
+            "uploadImg":"上传头像",
+            "registerMessage":"注册成功，你可以登录了！",
+            "passwordError":"密码只能包含数字字母及特殊符号“!@#&?.”",
+            "emailError":"邮箱格式错误，请核对后重新输入",
+            "uploadError":"您还需要一张美美的头像哦～"
         }
     },
+    "loading":"加载中...",
     "userList":{
         "searchPlaceholder":"搜索"
     },
@@ -33,5 +39,6 @@
         "sharedImg":"分享图片",
         "sharedFile":"分享文件",
         "loginOut":"退出登陆"
-    }
+    },
+    "uploadError":"哦,出现了一些问题~"
 }
