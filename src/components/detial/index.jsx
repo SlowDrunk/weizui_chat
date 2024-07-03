@@ -1,18 +1,31 @@
 import React from "react";
 import "./detial.css";
 import { useTranslation } from "react-i18next";
+import { useUserStore } from "../../lib/userStore";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../lib/firebase";
 
 export default function Detial() {
 	const { t } = useTranslation();
+	const { fetchUserInfo, currentUser } = useUserStore();
 	const handleBlock = async () => {};
 
-	const handleLogout = () => {};
+	const handleLogout = () => {
+		const unSub = onAuthStateChanged(auth, (user) => {
+			fetchUserInfo(user.uid);
+		});
+	};
 
 	return (
 		<div className="detail">
 			<div className="user">
-				<img src="./avatar.png" alt="" />
-				<h2>Weizui~</h2>
+				<img
+					src={
+						currentUser.avatar ? currentUser.avatar : "./avatar.png"
+					}
+					alt=""
+				/>
+				<h2>{currentUser.username}</h2>
 				<p>A greatful Hansband,Supper Cool!</p>
 			</div>
 			<div className="info">
@@ -90,7 +103,9 @@ export default function Detial() {
 				</div>
 			</div>
 			<div className="button-container">
-				<button onClick={handleBlock}>You are Blocked</button>
+				<button onClick={handleBlock}>
+					{currentUser.blocked ? "Unblock" : "Blocked"}
+				</button>
 				<button className="logout" onClick={handleLogout}>
 					{t("userInfo.loginOut")}
 				</button>

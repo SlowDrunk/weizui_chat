@@ -2,8 +2,10 @@ import "./chart.css";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
 import {useTranslation} from 'react-i18next'
+import { useUserStore } from "../../lib/userStore";
 
 export default function Chart() {
+	const {currentUser} = useUserStore()
 	const [open, setOpen] = useState(false);
 	const [text, setText] = useState("");
 	const {t} = useTranslation()
@@ -14,9 +16,9 @@ export default function Chart() {
 		<div className="chat">
 			<div className="top">
 				<div className="user">
-					<img src="./avatar.png" alt="" />
+				<img src={currentUser.avatar ? currentUser.avatar : './avatar.png'} alt="" />
 					<div className="texts">
-						<span>WeiZui</span>
+						<span>{currentUser.username}</span>
 						<p>hello，happly NewYear</p>
 					</div>
 				</div>

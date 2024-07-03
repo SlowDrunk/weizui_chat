@@ -39,8 +39,8 @@ export default function Login() {
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		const formData = new FormData(e.target);
+		const { password, email } = Object.fromEntries(formData);
 		try {
-			const { password, email } = Object.fromEntries(formData);
 			if (!testPassword(password)) {
 				toast.warn(t("login.register.passwordError"));
 				return;
@@ -114,10 +114,12 @@ export default function Login() {
 				<form onSubmit={handleLogin}>
 					<input
 						type="text"
+						name="email"
 						placeholder={t("login.signUp.usernamePlaceholder")}
 					/>
 					<input
 						type="password"
+						name="password"
 						placeholder={t("login.signUp.passwordPlaceholder")}
 					/>
 					<button disabled={loginLoading}>
