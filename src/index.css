@@ -53,3 +53,10 @@ html {
 	border-radius: 10px;
 	background-color: rgba(17, 25, 40, 0.9);
 }
+/* 用于覆盖antd样式，原则上不允许这样，但由于本项目使用较少所以暂时这样，后续找到合适的方法会改的 */
+ul {
+	background-color: rgb(17, 25, 40, 0.75) !important;
+	li {
+		color: #ffffff !important;
+	}
+}

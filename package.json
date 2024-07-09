@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
+    "antd": "^5.19.1",
+    "dayjs": "^1.11.11",
     "emoji-picker-react": "^4.10.0",
     "firebase": "^10.12.2",
     "i18next": "^23.11.5",

@@ -43,14 +43,15 @@
             cursor: pointer;
           }
         }
-  
         .photos {
           display: flex;
           flex-direction: column;
-          gap: 20px;
           margin-top: 20px;
+          height: auto;
+          transition: all 0.3s ease;
   
           .photoItem {
+            margin-top: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;

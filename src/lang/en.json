@@ -26,6 +26,7 @@
         }
     },
     "loading": "Loading...",
+    "editUser":"Confirm the changes",
     "userList": {
         "searchPlaceholder": "Search"
     },
@@ -34,7 +35,7 @@
         "sendPlaceholder": "Please enter..."
     },
     "userInfo": {
-        "chatSeting": "Settings",
+        "chatSeting": "Setting Language",
         "privacyPolicy": "Privacy Policy",
         "sharedImg": "Shared Images",
         "sharedFile": "Shared Files",

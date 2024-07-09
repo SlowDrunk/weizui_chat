@@ -15,12 +15,12 @@ import { db } from "../../../../lib/firebase";
 import { useState } from "react";
 import { useUserStore } from "../../../../lib/userStore";
 import { toast } from "react-toastify";
-import { useTransition } from "react";
+import { useTranslation } from "react-i18next";
 
-
-export default function AddUser() {
+export default function AddUser(props) {
+	const { setAddMode } = props;
 	const { currentUser } = useUserStore();
-  const {t} = useTransition
+	const { t } = useTranslation();
 	const [user, setUser] = useState();
 	const handleSearch = async (e) => {
 		e.preventDefault();
@@ -44,44 +44,49 @@ export default function AddUser() {
 	};
 
 	const handleAdd = async () => {
-		const chatRef = collection(db, "charts");
+		const chatRef = collection(db, "chats");
+
 		const userChatsRef = collection(db, "userchats");
+		
 		try {
-      const newChatRef = doc(chatRef);
+			const newChatRef = doc(chatRef);
 
-      await setDoc(newChatRef, {
-        createdAt: serverTimestamp(),
-        messages: [],
-      });
+			await setDoc(newChatRef, {
+				createdAt: serverTimestamp(),
+				messages: [],
+			});
 
-      await updateDoc(doc(userChatsRef, user.id), {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          lastMessage: "",
-          receiverId: currentUser.id,
-          updatedAt: Date.now(),
-        }),
-      });
+			await updateDoc(doc(userChatsRef, user.id), {
+				chats: arrayUnion({
+					chatId: newChatRef.id,
+					lastMessage: "",
+					receiverId: currentUser.id,
+					updatedAt: Date.now(),
+				}),
+			});
 
-      await updateDoc(doc(userChatsRef, currentUser.id), {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          lastMessage: "",
-          receiverId: user.id,
-          updatedAt: Date.now(),
-        }),
-      });
-      toast.success(t('userList.addMessage'))
+			await updateDoc(doc(userChatsRef, currentUser.id), {
+				chats: arrayUnion({
+					chatId: newChatRef.id,
+					lastMessage: "",
+					receiverId: user.id,
+					updatedAt: Date.now(),
+				}),
+			});
+
+			toast.success(t("userList.addMessage"));
 		} catch (err) {
 			console.error(err);
-      toast.error(err)
+			toast.error(err);
+		} finally {
+			setAddMode(false);
 		}
 	};
 	return (
 		<div className="addUser">
 			<form action="" onSubmit={handleSearch}>
 				<input type="text" placeholder="用户名" name="username" />
-				<button>{t('userList.searchPlaceholder')}</button>
+				<button>{t("userList.searchPlaceholder")}</button>
 			</form>
 			{user && (
 				<div className="user">
@@ -92,7 +97,7 @@ export default function AddUser() {
 						/>
 						<span>{user.username}</span>
 					</div>
-					<button onClick={handleAdd}>{t('userList.addBtn')}</button>
+					<button onClick={handleAdd}>{t("userList.addBtn")}</button>
 				</div>
 			)}
 		</div>

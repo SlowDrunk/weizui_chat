@@ -6,11 +6,14 @@ import { useUserStore } from "../../../lib/userStore";
 import { useEffect } from "react";
 import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
+import dayjs from "dayjs";
+import { useChatStore } from "../../../lib/chatStore";
 
 export default function ChartList() {
 	const { t } = useTranslation();
 	const [addMode, setAddMode] = useState(false);
 	const [chats, setChats] = useState([]);
+	const { changeChat } = useChatStore();
 
 	const { currentUser } = useUserStore();
 
@@ -18,6 +21,7 @@ export default function ChartList() {
 		const unsub = onSnapshot(
 			doc(db, "userchats", currentUser.id),
 			async (res) => {
+				if (!res.data()) return;
 				const items = res.data().chats;
 				const promistArr = items.map(async (item) => {
 					const userRef = doc(db, "users", item.receiverId);
@@ -26,13 +30,37 @@ export default function ChartList() {
 					return { ...item, user };
 				});
 				const chartData = await Promise.all(promistArr);
-				setChats(chartData.sort((a, b) => b.updatedAt - a.updatedAt));
+				let resultChat = [];
+				// 如果已经存在的用户就不展示
+				chartData.forEach((item) => {
+					const index = resultChat.findIndex(
+						(chat) => chat.user.id === item.user.id
+					);
+					if (index === -1) {
+						resultChat.push(item);
+					}
+				});
+				setChats(resultChat.sort((a, b) => b.updatedAt - a.updatedAt));
 			}
 		);
 		return () => {
 			unsub();
 		};
 	}, [currentUser.id]);
+	// 处理聊天时间，如果是当天现实具体时间，否则显示日期
+	const handleUpadteTime = (time) => {
+		const dateToCheck = dayjs(time);
+		const isSameDay = dateToCheck.isSame(dayjs(), "day");
+		if (isSameDay) {
+			return dateToCheck.format("HH:mm");
+		} else {
+			return dateToCheck.format("YYYY-MM-DD");
+		}
+	};
+	// 改变聊天框
+	const handleSelect = async (chat) => {
+		changeChat(chat.chatId, chat.user);
+	};
 	return (
 		<div className="chatList">
 			<div className="search">
@@ -52,23 +80,32 @@ export default function ChartList() {
 			</div>
 			{chats.map((chat) => {
 				return (
-					<div className="item" key={chat.chatId}>
-						<img
-							src={
-								chat.user.avatar
-									? chat.user.avatar
-									: "./avatar.png"
-							}
-							alt=""
-						/>
-						<div className="texts">
-							<span>{chat.user.username}</span>
-							<p>{chat.lastMessage}</p>
+					<div
+						className="item"
+						key={chat.chatId}
+						onClick={() => handleSelect(chat)}
+					>
+						<div className="userinfo">
+							<img
+								src={
+									chat.user.avatar
+										? chat.user.avatar
+										: "./avatar.png"
+								}
+								alt=""
+							/>
+							<div className="texts">
+								<span>{chat.user.username}</span>
+								<p>{chat.lastMessage}</p>
+							</div>
+						</div>
+						<div style={{ fontSize: "12px", color: "#ccc" }}>
+							<span>{handleUpadteTime(chat.updatedAt)}</span>
 						</div>
 					</div>
 				);
 			})}
-			{addMode && <AddUser></AddUser>}
+			{addMode && <AddUser setAddMode={setAddMode}></AddUser>}
 		</div>
 	);
 }

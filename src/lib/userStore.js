@@ -9,6 +9,7 @@ export const useUserStore = create((set) => ({
 	fetchUserInfo: async (uid) => {
 		if (!uid) return set({ currentUser: null, isLoading: false });
 		try {
+			set({ currentUser: null, isLoading: true });
             const docRef = doc(db, "users", uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {

@@ -2,18 +2,30 @@ import React from "react";
 import "./detial.css";
 import { useTranslation } from "react-i18next";
 import { useUserStore } from "../../lib/userStore";
+import { useChatStore } from "../../lib/chatStore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
+import { Space, Switch } from "antd";
+import { useState } from "react";
 
 export default function Detial() {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const [lang, setLang] = useState(i18n.language);
+	const [showPhotos, setShowPhotos] = useState(false);
 	const { fetchUserInfo, currentUser } = useUserStore();
+	const {
+		chatId,
+		user,
+		isCurrentUserBlocked,
+		isReceiverBlocked,
+		changeBlock,
+		resetChat,
+	} = useChatStore();
 	const handleBlock = async () => {};
 
 	const handleLogout = () => {
-		const unSub = onAuthStateChanged(auth, (user) => {
-			fetchUserInfo(user.uid);
-		});
+		auth.signOut();
+		resetChat();
 	};
 
 	return (
@@ -32,27 +44,29 @@ export default function Detial() {
 				<div className="option">
 					<div className="title">
 						<span>{t("userInfo.chatSeting")}</span>
-						<img src="./arrowUp.png" alt="" />
-					</div>
-				</div>
-				{/* <div className="option">
-					<div className="title">
-						<span>Chat Settings</span>
-						<img src="./arrowUp.png" alt="" />
-					</div>
-				</div> */}
-				<div className="option">
-					<div className="title">
-						<span>{t("userInfo.privacyPolicy")}</span>
-						<img src="./arrowUp.png" alt="" />
+						<div>
+							<Space direction="vertical">
+								<Switch
+									checkedChildren="中文"
+									unCheckedChildren="english"
+									defaultChecked
+									onChange={(val) => {
+										i18n.changeLanguage(val ? "zh" : "en");
+									}}
+								/>
+							</Space>
+						</div>
 					</div>
 				</div>
 				<div className="option">
 					<div className="title">
 						<span>{t("userInfo.sharedImg")}</span>
-						<img src="./arrowDown.png" alt="" />
+						<img src={showPhotos ? "./arrowUp.png" : "./arrowDown.png"} alt="" onClick={()=>setShowPhotos((pre)=>!pre)} />
 					</div>
-					<div className="photos">
+					<div
+						className="photos"
+						style={{ display: showPhotos ? "block" : "none" }}
+					>
 						<div className="photoItem">
 							<div className="photoDetail">
 								<img
@@ -93,12 +107,6 @@ export default function Detial() {
 							</div>
 							<img src="./download.png" alt="" className="icon" />
 						</div>
-					</div>
-				</div>
-				<div className="option">
-					<div className="title">
-						<span>{t("userInfo.sharedFile")}</span>
-						<img src="./arrowUp.png" alt="" />
 					</div>
 				</div>
 			</div>

@@ -8,20 +8,22 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/userStore";
+import { useChatStore } from "./lib/chatStore";
 import { useTranslation } from "react-i18next";
 
 const App = () => {
 	const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+	const { chatId } = useChatStore();
 	const { t, i18n } = useTranslation();
 
 	useEffect(() => {
 		const unSub = onAuthStateChanged(auth, (user) => {
-			fetchUserInfo(user.uid)
+			fetchUserInfo(user?.uid);
 		});
 		return () => {
 			unSub();
 		};
-	},[fetchUserInfo]);
+	}, [fetchUserInfo]);
 	// 加载页
 	if (isLoading) return <div className="loading">{t("loading")}</div>;
 
@@ -30,8 +32,8 @@ const App = () => {
 			{currentUser ? (
 				<>
 					<List />
-					<Chart />
-					<Detial />
+					{chatId && <Chart />}
+					{chatId && <Detial />}
 				</>
 			) : (
 				<Login />
