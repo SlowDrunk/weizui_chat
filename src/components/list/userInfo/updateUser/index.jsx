@@ -26,10 +26,13 @@ export default function UpdateUser(props) {
 		});
 		updateForm.current.username.value = currentUser.username;
 		updateForm.current.email.value = currentUser.email;
+		updateForm.current.signature.value = currentUser.signature
+			? currentUser.signature
+			: "";
 	}, [currentUser]);
 
 	const handleAvatar = (e) => {
-		debugger
+		debugger;
 		if (e.target.files[0]) {
 			setAvatar({
 				file: e.target.files[0],
@@ -42,7 +45,8 @@ export default function UpdateUser(props) {
 		setLoading(true);
 		e.preventDefault();
 		const formData = new FormData(e.target);
-		const { username, password, email } = Object.fromEntries(formData);
+		const { username, password, email, signature } =
+			Object.fromEntries(formData);
 		try {
 			if (!avatar.file) {
 				toast.warn(t("login.register.uploadError"));
@@ -63,6 +67,7 @@ export default function UpdateUser(props) {
 				email,
 				avatar: imgUrl,
 				password,
+				signature,
 			});
 			toast.success("修改成功");
 			setUpdateUser(false);
@@ -106,6 +111,11 @@ export default function UpdateUser(props) {
 						type="password"
 						placeholder={t("login.register.passwordPlaceholder")}
 						name="password"
+					/>
+					<input
+						type="text"
+						placeholder={t("login.register.signaturePlaceholder")}
+						name="signature"
 					/>
 					<div className="button-box">
 						<button disabled={loading}>

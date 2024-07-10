@@ -14,6 +14,7 @@
             "username": "用户名",
             "email": "邮箱",
             "emailPlaceholder": "请输入邮箱",
+            "signaturePlaceholder": "请输入个性签名",
             "usernamePlaceholder": "请输入用户名",
             "passwordPlaceholder": "请输入密码",
             "password": "密码",
@@ -43,5 +44,6 @@
         "sharedFile": "分享文件",
         "loginOut": "退出登陆"
     },
-    "uploadError": "哦,出现了一些问题~"
+    "uploadError": "哦,出现了一些问题~",
+    "signature": "这个人很懒什么都没留下"
 }

@@ -1,17 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./detial.css";
 import { useTranslation } from "react-i18next";
 import { useUserStore } from "../../lib/userStore";
 import { useChatStore } from "../../lib/chatStore";
+import {
+	arrayRemove,
+	arrayUnion,
+	doc,
+	getDoc,
+	onSnapshot,
+	updateDoc,
+} from "firebase/firestore";
+import { db } from "../../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Space, Switch } from "antd";
-import { useState } from "react";
 
 export default function Detial() {
 	const { t, i18n } = useTranslation();
 	const [lang, setLang] = useState(i18n.language);
 	const [showPhotos, setShowPhotos] = useState(false);
+	const [photos, setPhotos] = useState();
 	const { fetchUserInfo, currentUser } = useUserStore();
 	const {
 		chatId,
@@ -21,7 +30,38 @@ export default function Detial() {
 		changeBlock,
 		resetChat,
 	} = useChatStore();
-	const handleBlock = async () => {};
+	useEffect(() => {
+		const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
+			const photos = res
+				.data()
+				.messages.filter((ele) => ele.img)
+				.map((message) => {
+					return {
+						id: message.senderId,
+						img: message.img,
+					};
+				});
+			setPhotos(photos || []);
+		});
+
+		return () => {
+			unSub();
+		};
+	}, [chatId]);
+	const handleBlock = async () => {
+		if (!user) return;
+		const userDocRef = doc(db, "users", currentUser.id);
+		try {
+			await updateDoc(userDocRef, {
+				blocked: isReceiverBlocked
+					? arrayRemove(user.id)
+					: arrayUnion(user.id),
+			});
+			changeBlock();
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	const handleLogout = () => {
 		auth.signOut();
@@ -31,14 +71,15 @@ export default function Detial() {
 	return (
 		<div className="detail">
 			<div className="user">
-				<img
-					src={
-						currentUser.avatar ? currentUser.avatar : "./avatar.png"
-					}
-					alt=""
-				/>
-				<h2>{currentUser.username}</h2>
-				<p>A greatful Hansband,Supper Cool!</p>
+				<img src={user.avatar ? user.avatar : "./avatar.png"} alt="" />
+				<h2>{user.username}</h2>
+				<p
+					style={{
+						color: user.signature ? "#ffffff" : "#cccccc",
+					}}
+				>
+					{user.signature ? user.signature : t("signature")}
+				</p>
 			</div>
 			<div className="info">
 				<div className="option">
@@ -61,58 +102,42 @@ export default function Detial() {
 				<div className="option">
 					<div className="title">
 						<span>{t("userInfo.sharedImg")}</span>
-						<img src={showPhotos ? "./arrowUp.png" : "./arrowDown.png"} alt="" onClick={()=>setShowPhotos((pre)=>!pre)} />
+						<img
+							src={
+								showPhotos ? "./arrowUp.png" : "./arrowDown.png"
+							}
+							alt=""
+							onClick={() => setShowPhotos((pre) => !pre)}
+						/>
 					</div>
 					<div
 						className="photos"
 						style={{ display: showPhotos ? "block" : "none" }}
 					>
-						<div className="photoItem">
-							<div className="photoDetail">
-								<img
-									src="https://images.pexels.com/photos/7381200/pexels-photo-7381200.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
-									alt=""
-								/>
-								<span>photo_2024_2.png</span>
-							</div>
-							<img src="./download.png" alt="" className="icon" />
-						</div>
-						<div className="photoItem">
-							<div className="photoDetail">
-								<img
-									src="https://images.pexels.com/photos/7381200/pexels-photo-7381200.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
-									alt=""
-								/>
-								<span>photo_2024_2.png</span>
-							</div>
-							<img src="./download.png" alt="" className="icon" />
-						</div>
-						<div className="photoItem">
-							<div className="photoDetail">
-								<img
-									src="https://images.pexels.com/photos/7381200/pexels-photo-7381200.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
-									alt=""
-								/>
-								<span>photo_2024_2.png</span>
-							</div>
-							<img src="./download.png" alt="" className="icon" />
-						</div>
-						<div className="photoItem">
-							<div className="photoDetail">
-								<img
-									src="https://images.pexels.com/photos/7381200/pexels-photo-7381200.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
-									alt=""
-								/>
-								<span>photo_2024_2.png</span>
-							</div>
-							<img src="./download.png" alt="" className="icon" />
-						</div>
+						{photos &&
+							photos.map((photo) => {
+								<div className="photoItem" key={photo.id}>
+									<div className="photoDetail">
+										<img src={photo.img} alt="" />
+										<span>{photo}</span>
+									</div>
+									<img
+										src="./download.png"
+										alt=""
+										className="icon"
+									/>
+								</div>;
+							})}
 					</div>
 				</div>
 			</div>
 			<div className="button-container">
 				<button onClick={handleBlock}>
-					{currentUser.blocked ? "Unblock" : "Blocked"}
+					{isCurrentUserBlocked
+						? "You Are Blocked!"
+						: isReceiverBlocked
+						? "User Blocked You!"
+						: "Block User"}
 				</button>
 				<button className="logout" onClick={handleLogout}>
 					{t("userInfo.loginOut")}

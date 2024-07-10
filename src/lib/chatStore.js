@@ -8,11 +8,11 @@ export const useChatStore = create((set) => ({
   isReceiverBlocked: false,
   changeChat: (chatId, user) => {
     const currentUser = useUserStore.getState().currentUser;
-
+    
     if (user.blocked.includes(currentUser.id)) {
       return set({
         chatId, //聊天id
-        user: null, // 当前对话的用户
+        user, // 当前对话的用户
         isCurrentUserBlocked: false, // 当前用户是否被对方拉黑
         isReceiverBlocked: false, // 对方是否被当前用户拉黑
       });

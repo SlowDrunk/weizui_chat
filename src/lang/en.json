@@ -14,6 +14,7 @@
             "username": "Username",
             "email": "Email",
             "emailPlaceholder": "Please enter email",
+            "signaturePlaceholder": "Please enter your personalized signature",
             "usernamePlaceholder": "Please enter username",
             "passwordPlaceholder": "Please enter password",
             "password": "Password",
@@ -41,5 +42,6 @@
         "sharedFile": "Shared Files",
         "loginOut": "Log Out"
     },
-    "uploadError": "Oh, something went wrong~"
+    "uploadError": "Oh, something went wrong~",
+    "signature": "This man was lazy and left nothing behind."
 }

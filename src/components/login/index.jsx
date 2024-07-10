@@ -118,7 +118,6 @@ export default function Login() {
 							id="zh"
 							name="zh"
 							value="zh"
-							checked={lang === "zh"}
 						/>
 						<label htmlFor="zh">中文</label>
 					</div>

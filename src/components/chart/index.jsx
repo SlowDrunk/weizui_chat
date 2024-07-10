@@ -13,29 +13,24 @@ import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const Chat = () => {
 	const [chat, setChat] = useState();
 	const [open, setOpen] = useState(false);
 	const [text, setText] = useState("");
+	const { t } = useTranslation();
 	const [img, setImg] = useState({
 		file: null,
 		url: "",
 	});
-
 	const { currentUser } = useUserStore();
 	const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
 		useChatStore();
-
 	const endRef = useRef(null);
-
-	// useEffect(() => {
-	// 	endRef.current?.scrollIntoView({ behavior: "smooth" });
-	// }, [chat.messages]);
 
 	useEffect(() => {
 		const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
-			console.log(res.data());
 			setChat(res.data());
 		});
 
@@ -48,35 +43,29 @@ const Chat = () => {
 		setText((prev) => prev + e.emoji);
 		setOpen(false);
 	};
-	// 设置图片
-	const handleImg = (e) => {
-		if (e.target.files[0]) {
-			setImg({
-				file: e.target.files[0],
-				url: URL.createObjectURL(e.target.files[0]),
-			});
-		}
-	};
-
-	const handleSend = async () => {
-		if (text === "") return;
-
+	const handleSend = async (messageType, file) => {
 		let imgUrl = null;
-
 		try {
-			if (img.file) {
-				imgUrl = await upload(img.file);
+			if (messageType === "picture") {
+				// 发送图片
+				imgUrl = await upload(file);
+				await updateDoc(doc(db, "chats", chatId), {
+					messages: arrayUnion({
+						senderId: currentUser.id,
+						createdAt: Date.now(),
+						img: imgUrl,
+					}),
+				});
+			} else {
+				// 发送文字
+				await updateDoc(doc(db, "chats", chatId), {
+					messages: arrayUnion({
+						senderId: currentUser.id,
+						text,
+						createdAt: Date.now(),
+					}),
+				});
 			}
-
-			await updateDoc(doc(db, "chats", chatId), {
-				messages: arrayUnion({
-					senderId: currentUser.id,
-					text,
-					createdAt: new Date(),
-					...(imgUrl && { img: imgUrl }),
-				}),
-			});
-
 			const userIDs = [currentUser.id, user.id];
 
 			userIDs.forEach(async (id) => {
@@ -90,7 +79,9 @@ const Chat = () => {
 						(c) => c.chatId === chatId
 					);
 
-					userChatsData.chats[chatIndex].lastMessage = text;
+					userChatsData.chats[chatIndex].lastMessage = text
+						? text
+						: "[图片]";
 					userChatsData.chats[chatIndex].isSeen =
 						id === currentUser.id ? true : false;
 					userChatsData.chats[chatIndex].updatedAt = Date.now();
@@ -110,6 +101,13 @@ const Chat = () => {
 			setText("");
 		}
 	};
+	const handleImg = (e) => {
+		setImg({
+			file: e.target.files[0],
+			url: URL.createObjectURL(e.target.files[0]),
+		});
+		handleSend("picture", e.target.files[0]);
+	};
 
 	return (
 		<div className="chat">
@@ -118,7 +116,13 @@ const Chat = () => {
 					<img src={user?.avatar || "./avatar.png"} alt="" />
 					<div className="texts">
 						<span>{user?.username}</span>
-						{/* <p>Lorem ipsum dolor, sit amet.</p> */}
+						<p
+							style={{
+								color: user?.signature ? "#ffffff" : "#cccccc",
+							}}
+						>
+							{user?.signature ? user.signature : t("signature")}
+						</p>
 					</div>
 				</div>
 				<div className="icons">
@@ -139,10 +143,16 @@ const Chat = () => {
 					>
 						<div className="texts">
 							{message.img && <img src={message.img} alt="" />}
-							<p>{message.text}</p>
-							<span>
-								{dayjs(message.createdAt).format("HH:mm A")}
-							</span>
+							{message.text && (
+								<div>
+									<p>{message.text}</p>
+									<span>
+										{dayjs(message.createdAt).format(
+											"HH:mm A"
+										)}
+									</span>
+								</div>
+							)}
 						</div>
 					</div>
 				))}
@@ -192,7 +202,9 @@ const Chat = () => {
 				</div>
 				<button
 					className="sendButton"
-					onClick={handleSend}
+					onClick={() => {
+						handleSend("text");
+					}}
 					disabled={isCurrentUserBlocked || isReceiverBlocked}
 				>
 					Send
