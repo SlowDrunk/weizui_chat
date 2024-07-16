@@ -12,7 +12,14 @@ export default function UserInfo() {
 	const { t, i18n } = useTranslation();
 	const { currentUser } = useUserStore();
 	const [updateUser, setUpdateUser] = useState(false);
+	const [lang, setLang] = useState(localStorage.getItem("lang") || "zh");
 
+	const handleLang = (val) => {
+		i18n.changeLanguage(val ? "zh" : "en");
+		setLang(val ? "zh" : "en");
+		i18n.changeLanguage(val ? "zh" : "en");
+		localStorage.setItem("lang", val ? "zh" : "en");
+	};
 	const items = [
 		{
 			key: "1",
@@ -26,9 +33,7 @@ export default function UserInfo() {
 							checkedChildren="中文"
 							unCheckedChildren="english"
 							defaultChecked
-							onChange={(val) => {
-								i18n.changeLanguage(val ? "zh" : "en");
-							}}
+							onChange={(val) => handleLang(val)}
 						/>
 					</Space>
 				</div>

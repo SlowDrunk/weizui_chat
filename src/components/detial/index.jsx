@@ -15,12 +15,15 @@ import { db } from "../../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Space, Switch } from "antd";
+import { handleDownload } from "../../lib/useDownload";
+import { Button } from "antd";
 
 export default function Detial() {
 	const { t, i18n } = useTranslation();
-	const [lang, setLang] = useState(i18n.language);
+	const [lang, setLang] = useState(localStorage.getItem("lang"));
 	const [showPhotos, setShowPhotos] = useState(false);
-	const [photos, setPhotos] = useState();
+	const [photos, setPhotos] = useState([]);
+	const [chats, setChats] = useState();
 	const { fetchUserInfo, currentUser } = useUserStore();
 	const {
 		chatId,
@@ -32,9 +35,18 @@ export default function Detial() {
 	} = useChatStore();
 	useEffect(() => {
 		const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
-			const photos = res
-				.data()
-				.messages.filter((ele) => ele.img)
+			setChats(res.data());
+		});
+
+		return () => {
+			unSub();
+		};
+	}, [chatId]);
+
+	useEffect(() => {
+		if (chats) {
+			const photos = chats.messages
+				.filter((ele) => ele.img)
 				.map((message) => {
 					return {
 						id: message.senderId,
@@ -42,12 +54,9 @@ export default function Detial() {
 					};
 				});
 			setPhotos(photos || []);
-		});
+		}
+	}, [chats]);
 
-		return () => {
-			unSub();
-		};
-	}, [chatId]);
 	const handleBlock = async () => {
 		if (!user) return;
 		const userDocRef = doc(db, "users", currentUser.id);
@@ -66,6 +75,13 @@ export default function Detial() {
 	const handleLogout = () => {
 		auth.signOut();
 		resetChat();
+	};
+
+	const handleLang = (val) => {
+		i18n.changeLanguage(val ? "zh" : "en");
+		setLang(val ? "zh" : "en");
+		i18n.changeLanguage(val ? "zh" : "en");
+		localStorage.setItem("lang", val ? "zh" : "en");
 	};
 
 	return (
@@ -91,9 +107,7 @@ export default function Detial() {
 									checkedChildren="中文"
 									unCheckedChildren="english"
 									defaultChecked
-									onChange={(val) => {
-										i18n.changeLanguage(val ? "zh" : "en");
-									}}
+									onChange={(val) => handleLang(val)}
 								/>
 							</Space>
 						</div>
@@ -115,19 +129,26 @@ export default function Detial() {
 						style={{ display: showPhotos ? "block" : "none" }}
 					>
 						{photos &&
-							photos.map((photo) => {
+							photos.map((photo) => (
 								<div className="photoItem" key={photo.id}>
 									<div className="photoDetail">
 										<img src={photo.img} alt="" />
-										<span>{photo}</span>
+										<span>{photo.id}</span>
 									</div>
-									<img
-										src="./download.png"
-										alt=""
-										className="icon"
-									/>
-								</div>;
-							})}
+									<Button
+										type="text"
+										onClick={() =>
+											handleDownload(photo.img)
+										}
+									>
+										<img
+											src="./download.png"
+											alt=""
+											className="icon"
+										/>
+									</Button>
+								</div>
+							))}
 					</div>
 				</div>
 			</div>

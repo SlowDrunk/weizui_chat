@@ -10,7 +10,12 @@ import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
 import { testEmail, testPassword } from "../../lib/testUtils";
+import { Radio } from "antd";
 
+const options = [
+	{ label: "中文", value: "zh" },
+	{ label: "英文", value: "en" },
+];
 
 export default function Login() {
 	const { t, i18n } = useTranslation();
@@ -21,7 +26,7 @@ export default function Login() {
 	const [registerLoading, setRegisterLoading] = useState(false);
 	const [loginLoading, setLoginLoading] = useState(false);
 	const [isLogin, setIsLogin] = useState(true);
-	const [lang, setLang] = useState(i18n.language);
+	const [lang, setLang] = useState(localStorage.getItem("lang") || "zh");
 
 	const handleAvatar = (e) => {
 		if (e.target.files[0]) {
@@ -103,36 +108,22 @@ export default function Login() {
 			setRegisterLoading(false);
 		}
 	};
-	const handleLang = (lang) => {
-		setLang(lang);
-		i18n.changeLanguage(lang);
+	const handleLang = (e) => {
+		if (e.target.value) {
+			setLang(e.target.value);
+			i18n.changeLanguage(e.target.value);
+			localStorage.setItem("lang", e.target.value);
+		}
 	};
 	return (
 		<div className="login">
 			<div className="lang">
 				<h4>设置语言</h4>
-				<div className="langs">
-					<div className="langItem" onClick={() => handleLang("zh")}>
-						<input
-							type="radio"
-							id="zh"
-							name="zh"
-							value="zh"
-						/>
-						<label htmlFor="zh">中文</label>
-					</div>
-					<div className="langItem" onClick={() => handleLang("en")}>
-						<input
-							type="radio"
-							id="en"
-							name="en"
-							value="en"
-							checked={lang === "en"}
-							onChange={() => setLang("en")}
-						/>
-						<label htmlFor="en">英文</label>
-					</div>
-				</div>
+				<Radio.Group
+					options={options}
+					onChange={(events) => handleLang(events)}
+					value={lang}
+				/>
 			</div>
 			{isLogin ? (
 				<div className="item">
@@ -149,7 +140,7 @@ export default function Login() {
 							placeholder={t("login.signUp.passwordPlaceholder")}
 						/>
 						<div className="button-box">
-							<button disabled={loginLoading}>
+							<button type="submit" disabled={loginLoading}>
 								{loginLoading
 									? t("loading")
 									: t("login.signUp.signin")}
@@ -202,9 +193,6 @@ export default function Login() {
 								{registerLoading
 									? t("loading")
 									: t("login.register.signin")}
-							</button>
-							<button onClick={() => setIsLogin(true)}>
-								{t("login.signUp.signin")}
 							</button>
 						</div>
 					</form>

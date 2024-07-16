@@ -11,11 +11,13 @@ import { useChatStore } from "../../../lib/chatStore";
 
 export default function ChartList() {
 	const { t } = useTranslation();
+	const { changeChat } = useChatStore();
+	const { currentUser } = useUserStore();
+
 	const [addMode, setAddMode] = useState(false);
 	const [chats, setChats] = useState([]);
-	const { changeChat } = useChatStore();
-
-	const { currentUser } = useUserStore();
+	const [currentChats, setCurrentChats] = useState([]);
+	const [searhText, setSearchText] = useState("");
 
 	useEffect(() => {
 		const unsub = onSnapshot(
@@ -41,12 +43,26 @@ export default function ChartList() {
 					}
 				});
 				setChats(resultChat.sort((a, b) => b.updatedAt - a.updatedAt));
+				setCurrentChats(
+					resultChat.sort((a, b) => b.updatedAt - a.updatedAt)
+				);
 			}
 		);
 		return () => {
 			unsub();
 		};
 	}, [currentUser.id]);
+
+	// TODO:搜索用户列表
+	useEffect(() => {
+		if (searhText) {
+			setCurrentChats(
+				chats.filter((chat) => chat.user.username.includes(searhText))
+			);
+		} else {
+			setCurrentChats(chats);
+		}
+	}, [searhText]);
 	// 处理聊天时间，如果是当天现实具体时间，否则显示日期
 	const handleUpadteTime = (time) => {
 		const dateToCheck = dayjs(time);
@@ -83,6 +99,7 @@ export default function ChartList() {
 					<input
 						type="text"
 						placeholder={t("userList.searchPlaceholder")}
+						onChange={(e) => setSearchText(e.target.value)}
 					/>
 				</div>
 				<img
@@ -92,7 +109,7 @@ export default function ChartList() {
 					onClick={() => setAddMode((pre) => !pre)}
 				/>
 			</div>
-			{chats.map((chat) => {
+			{currentChats.map((chat) => {
 				return (
 					<div
 						className="item"
@@ -118,7 +135,14 @@ export default function ChartList() {
 								<p>{chat.lastMessage}</p>
 							</div>
 						</div>
-						<div style={{ fontSize: "12px", color: "#ccc" }}>
+						<div
+							style={{
+								fontSize: "12px",
+								color: "#ccc",
+								width: "80px",
+								textAlign: "right",
+							}}
+						>
 							<span>{handleUpadteTime(chat.updatedAt)}</span>
 						</div>
 					</div>

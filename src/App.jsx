@@ -14,14 +14,15 @@ import { useTranslation } from "react-i18next";
 const App = () => {
 	const { currentUser, isLoading, fetchUserInfo } = useUserStore();
 	const { chatId } = useChatStore();
-	const { t, i18n } = useTranslation();
-
+	const { t } = useTranslation();
 	useEffect(() => {
 		const unSub = onAuthStateChanged(auth, (user) => {
 			fetchUserInfo(user?.uid);
 		});
+		localStorage.setItem("lang", "ch");
 		return () => {
 			unSub();
+			localStorage.removeItem("lang");
 		};
 	}, [fetchUserInfo]);
 	// 加载页

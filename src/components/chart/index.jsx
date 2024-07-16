@@ -132,14 +132,14 @@ const Chat = () => {
 				</div>
 			</div>
 			<div className="center">
-				{chat?.messages?.map((message) => (
+				{chat?.messages?.map((message, index) => (
 					<div
 						className={
 							message.senderId === currentUser?.id
 								? "message own"
 								: "message"
 						}
-						key={message?.createAt}
+						key={index}
 					>
 						<div className="texts">
 							{message.img && <img src={message.img} alt="" />}
