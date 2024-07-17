@@ -8,6 +8,7 @@ import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import dayjs from "dayjs";
 import { useChatStore } from "../../../lib/chatStore";
+import { Badge } from "antd";
 
 export default function ChartList() {
 	const { t } = useTranslation();
@@ -43,6 +44,7 @@ export default function ChartList() {
 					}
 				});
 				setChats(resultChat.sort((a, b) => b.updatedAt - a.updatedAt));
+				console.log(chats);
 				setCurrentChats(
 					resultChat.sort((a, b) => b.updatedAt - a.updatedAt)
 				);
@@ -115,21 +117,18 @@ export default function ChartList() {
 						className="item"
 						key={chat.chatId}
 						onClick={() => handleSelect(chat)}
-						style={{
-							backgroundColor: chat.isSeen
-								? "transparent"
-								: "#5183fe",
-						}}
 					>
 						<div className="userinfo">
-							<img
-								src={
-									chat.user.avatar
-										? chat.user.avatar
-										: "./avatar.png"
-								}
-								alt=""
-							/>
+							<Badge dot={!chat.isSeen}>
+								<img
+									src={
+										chat.user.avatar
+											? chat.user.avatar
+											: "./avatar.png"
+									}
+									alt=""
+								/>
+							</Badge>
 							<div className="texts">
 								<span>{chat.user.username}</span>
 								<p>{chat.lastMessage}</p>

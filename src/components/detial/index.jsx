@@ -16,14 +16,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Space, Switch } from "antd";
 import { handleDownload } from "../../lib/useDownload";
-import { Button } from "antd";
+import { Image, Tooltip } from "antd";
 
 export default function Detial() {
 	const { t, i18n } = useTranslation();
 	const [lang, setLang] = useState(localStorage.getItem("lang"));
-	const [showPhotos, setShowPhotos] = useState(false);
 	const [photos, setPhotos] = useState([]);
 	const [chats, setChats] = useState();
+	const [showPhotos, setShowPhotos] = useState(false);
 	const { fetchUserInfo, currentUser } = useUserStore();
 	const {
 		chatId,
@@ -54,6 +54,7 @@ export default function Detial() {
 					};
 				});
 			setPhotos(photos || []);
+			setShowPhotos(photos.length);
 		}
 	}, [chats]);
 
@@ -132,21 +133,11 @@ export default function Detial() {
 							photos.map((photo) => (
 								<div className="photoItem" key={photo.id}>
 									<div className="photoDetail">
-										<img src={photo.img} alt="" />
-										<span>{photo.id}</span>
+										<Image src={photo.img} alt="" />
+										<Tooltip title={photo.id}>
+											<span>{photo.id}</span>
+										</Tooltip>
 									</div>
-									<Button
-										type="text"
-										onClick={() =>
-											handleDownload(photo.img)
-										}
-									>
-										<img
-											src="./download.png"
-											alt=""
-											className="icon"
-										/>
-									</Button>
 								</div>
 							))}
 					</div>

@@ -1,123 +1,121 @@
 .detail {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  
-    .user {
-      padding: 30px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      border-bottom: 1px solid #dddddd35;
-  
-      img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-    }
-  
-    .info {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      flex: 1;
-      overflow: auto;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 
-  
-      .option {
-        .title {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-  
-          img {
-            width: 30px;
-            height: 30px;
-            background-color: rgba(17, 25, 40, 0.3);
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-          }
-        }
-        .photos {
-          display: flex;
-          flex-direction: column;
-          margin-top: 20px;
-          height: auto;
-          transition: all 0.3s ease;
-  
-          .photoItem {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-  
-            .photoDetail {
-              display: flex;
-              align-items: center;
-              gap: 20px;
-  
-              img {
-                width: 40px;
-                height: 40px;
-                border-radius: 5px;
-                object-fit: cover;
-              }
-  
-              span {
-                width: 95px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                font-size: 14px;
-                color: lightgray;
-                font-weight: 300;
-              }
-            }
-  
-            .icon {
-              width: 30px;
-              height: 30px;
-              background-color: rgba(17, 25, 40, 0.3);
-              padding: 10px;
-              border-radius: 50%;
-              cursor: pointer;
-            }
-          }
-        }
-      }
-     
-    }
-    .button-container{
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin-top: 20px;
-        padding: 20px;
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: rgba(230, 74, 105, 0.553);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-      
-            &:hover {
-              background-color: rgba(220, 20, 60, 0.796);
-            }
-      
-            &.logout{
-              padding: 10px;
-              background-color: #1a73e8;
-            }
-          }
-    }
-  }
+	.user {
+		padding: 30px 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 15px;
+		border-bottom: 1px solid #dddddd35;
+
+		img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			object-fit: cover;
+		}
+	}
+
+	.info {
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 25px;
+		flex: 1;
+		overflow: auto;
+
+		.option {
+			.title {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+
+				img {
+					width: 30px;
+					height: 30px;
+					background-color: rgba(17, 25, 40, 0.3);
+					padding: 10px;
+					border-radius: 50%;
+					cursor: pointer;
+				}
+			}
+			.photos {
+				display: flex;
+				flex-direction: column;
+				margin-top: 20px;
+				height: auto;
+				transition: all 0.3s ease;
+
+				.photoItem {
+					margin-top: 20px;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					.photoDetail {
+						display: flex;
+						align-items: center;
+						gap: 20px;
+
+						img {
+							width: 40px;
+							height: 40px;
+							border-radius: 5px;
+							object-fit: cover;
+						}
+
+						span {
+							width: 120px;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+							font-size: 14px;
+							color: lightgray;
+							font-weight: 300;
+						}
+					}
+
+					.icon {
+						width: 30px;
+						height: 30px;
+						background-color: rgba(17, 25, 40, 0.3);
+						padding: 10px;
+						border-radius: 50%;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+	}
+	.button-container {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		margin-top: 20px;
+		padding: 20px;
+		button {
+			width: 100%;
+			padding: 15px;
+			background-color: rgba(230, 74, 105, 0.553);
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: rgba(220, 20, 60, 0.796);
+			}
+
+			&.logout {
+				padding: 10px;
+				background-color: #1a73e8;
+			}
+		}
+	}
+}

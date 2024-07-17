@@ -14,6 +14,7 @@ import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { Image } from "antd";
 
 const Chat = () => {
 	const [chat, setChat] = useState();
@@ -142,7 +143,7 @@ const Chat = () => {
 						key={index}
 					>
 						<div className="texts">
-							{message.img && <img src={message.img} alt="" />}
+							{message.img && <Image src={message.img} alt="" />}
 							{message.text && (
 								<div>
 									<p>{message.text}</p>
@@ -159,7 +160,7 @@ const Chat = () => {
 				{img.url && (
 					<div className="message own">
 						<div className="texts">
-							<img src={img.url} alt="" />
+							<Image src={img.url} alt="" />
 						</div>
 					</div>
 				)}
