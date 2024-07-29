@@ -20,6 +20,9 @@ const Chat = () => {
 	const [chat, setChat] = useState();
 	const [open, setOpen] = useState(false);
 	const [text, setText] = useState("");
+	const [isRecoginition, setIsRecoginition] = useState(false);
+	let recognition =
+		new window.webkitSpeechRecognition() || new window.SpeechRecognition();
 	const { t } = useTranslation();
 	const [img, setImg] = useState({
 		file: null,
@@ -31,14 +34,19 @@ const Chat = () => {
 	const endRef = useRef(null);
 
 	useEffect(() => {
+		recognition.continuous = true;
+		recognition.lang = "zh-CN";
 		const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
 			setChat(res.data());
 		});
-
 		return () => {
 			unSub();
 		};
 	}, [chatId]);
+
+	recognition.onresult = (e) => {
+		setText((pre) => pre + e.results[0][0].transcript);
+	};
 
 	const handleEmoji = (e) => {
 		setText((prev) => prev + e.emoji);
@@ -178,7 +186,19 @@ const Chat = () => {
 						onChange={handleImg}
 					/>
 					<img src="./camera.png" alt="" />
-					<img src="./mic.png" alt="" />
+					<img
+						className={isRecoginition ? "mic" : ""}
+						src="./mic.png"
+						onClick={() => {
+							setIsRecoginition((pre) => !pre);
+							if (isRecoginition) {
+								recognition.start();
+							} else {
+								recognition.stop();
+							}
+						}}
+						alt=""
+					/>
 				</div>
 				<input
 					type="text"
