@@ -190,12 +190,12 @@ const Chat = () => {
 						className={isRecoginition ? "mic" : ""}
 						src="./mic.png"
 						onClick={() => {
-							setIsRecoginition((pre) => !pre);
 							if (isRecoginition) {
 								recognition.start();
 							} else {
 								recognition.stop();
 							}
+							setIsRecoginition((pre) => !pre);
 						}}
 						alt=""
 					/>

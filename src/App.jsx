@@ -19,7 +19,9 @@ const App = () => {
 		const unSub = onAuthStateChanged(auth, (user) => {
 			fetchUserInfo(user?.uid);
 		});
-		localStorage.setItem("lang", "ch");
+		if (localStorage.getItem("lang")) {
+			localStorage.setItem("lang", localStorage.getItem("lang"));
+		}
 		return () => {
 			unSub();
 			localStorage.removeItem("lang");

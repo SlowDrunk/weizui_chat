@@ -26,7 +26,7 @@ export default function Login() {
 	const [registerLoading, setRegisterLoading] = useState(false);
 	const [loginLoading, setLoginLoading] = useState(false);
 	const [isLogin, setIsLogin] = useState(true);
-	const [lang, setLang] = useState(localStorage.getItem("lang") || "zh");
+	const [lang, setLang] = useState(localStorage.getItem("lang"));
 
 	const handleAvatar = (e) => {
 		if (e.target.files[0]) {
