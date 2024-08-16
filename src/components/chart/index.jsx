@@ -14,13 +14,18 @@ import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-import { Image } from "antd";
+import { Image, Modal, Button } from "antd";
+import { CameraOutlined, SendOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import { base64ToFile } from "../../utils/base64ToFile.js";
 
 const Chat = () => {
 	const [chat, setChat] = useState();
 	const [open, setOpen] = useState(false);
 	const [text, setText] = useState("");
 	const [isRecoginition, setIsRecoginition] = useState(false);
+	const [isModalOpen, setIsModelOpen] = useState(false);
+	// 语音识别实例对象
 	let recognition =
 		new window.webkitSpeechRecognition() || new window.SpeechRecognition();
 	const { t } = useTranslation();
@@ -28,6 +33,8 @@ const Chat = () => {
 		file: null,
 		url: "",
 	});
+	const videoRef = useRef(null);
+	const canvasRef = useRef(null);
 	const { currentUser } = useUserStore();
 	const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
 		useChatStore();
@@ -52,6 +59,7 @@ const Chat = () => {
 		setText((prev) => prev + e.emoji);
 		setOpen(false);
 	};
+
 	const handleSend = async (messageType, file) => {
 		let imgUrl = null;
 		try {
@@ -110,12 +118,71 @@ const Chat = () => {
 			setText("");
 		}
 	};
+
 	const handleImg = (e) => {
 		setImg({
 			file: e.target.files[0],
 			url: URL.createObjectURL(e.target.files[0]),
 		});
 		handleSend("picture", e.target.files[0]);
+	};
+
+	const handleCamera = () => {
+		setIsModelOpen(true);
+		navigator.mediaDevices
+			.getUserMedia({ video: true })
+			.then((steam) => {
+				if (videoRef.current) {
+					videoRef.current.srcObject = steam;
+				}
+			})
+			.catch((err) => {
+				toast.error(err);
+			});
+	};
+	// 绘制摄像头的最后一帧到屏幕
+	const DrawPicture = () => {
+		if (canvasRef.current) {
+			const content = canvasRef.current.getContext("2d");
+			content.drawImage(
+				videoRef.current,
+				0,
+				0,
+				canvasRef.current.width,
+				canvasRef.current.height
+			);
+			const imageData = canvasRef.current.toDataURL("image/png");
+			setImg({
+				file: base64ToFile(imageData),
+				url: URL.createObjectURL(base64ToFile(imageData)),
+			});
+		}
+	};
+	// 关闭当前标签的所有媒体流
+	const closeCamera = () => {
+		if (videoRef.current.srcObject) {
+			const tracks = videoRef.current.srcObject.getTracks();
+			tracks.forEach((track) => track.stop());
+		}
+	};
+	// 点击确认
+	const handleOk = () => {
+		closeCamera();
+		handleSend("picture", img.file);
+		setIsModelOpen(false);
+		setImg({
+			file: null,
+			url: "",
+		});
+	};
+	// 取消
+	const handleCancel = () => {
+		closeCamera();
+		setIsModelOpen(false);
+		setImg({
+			file: null,
+			url: "",
+		});
 	};
 
 	return (
@@ -133,11 +200,6 @@ const Chat = () => {
 							{user?.signature ? user.signature : t("signature")}
 						</p>
 					</div>
-				</div>
-				<div className="icons">
-					<img src="./phone.png" alt="" />
-					<img src="./video.png" alt="" />
-					<img src="./info.png" alt="" />
 				</div>
 			</div>
 			<div className="center">
@@ -185,7 +247,7 @@ const Chat = () => {
 						style={{ display: "none" }}
 						onChange={handleImg}
 					/>
-					<img src="./camera.png" alt="" />
+					<img src="./camera.png" alt="" onClick={handleCamera} />
 					<img
 						className={isRecoginition ? "mic" : ""}
 						src="./mic.png"
@@ -202,11 +264,7 @@ const Chat = () => {
 				</div>
 				<input
 					type="text"
-					placeholder={
-						isCurrentUserBlocked || isReceiverBlocked
-							? "You cannot send a message"
-							: "Type a message..."
-					}
+					placeholder={t("chat.sendPlaceholder")}
 					value={text}
 					onChange={(e) => setText(e.target.value)}
 					disabled={isCurrentUserBlocked || isReceiverBlocked}
@@ -228,9 +286,54 @@ const Chat = () => {
 					}}
 					disabled={isCurrentUserBlocked || isReceiverBlocked}
 				>
-					Send
+					{t("chat.sendBtn")}
 				</button>
 			</div>
+			<Modal
+				title="Basic Modal"
+				open={isModalOpen}
+				onCancel={handleCancel}
+				footer={null}
+			>
+				<div className="videoBox">
+					<video
+						ref={videoRef}
+						style={{
+							display: img.url ? "none" : "block",
+						}}
+						id="video"
+						autoPlay
+					></video>
+					<canvas
+						ref={canvasRef}
+						style={{
+							display: img.url ? "block" : "none",
+							borderRadius: "16px",
+						}}
+						width="472"
+						height="354"
+					></canvas>
+				</div>
+				<div className="modalBottom">
+					<Button
+						style={{ flex: 1 }}
+						icon={<CameraOutlined />}
+						onClick={() => {
+							DrawPicture();
+						}}
+					>
+						{t("chat.photoBtn")}
+					</Button>
+					<Button
+						style={{ flex: 1 }}
+						type="primary"
+						icon={<SendOutlined />}
+						onClick={handleOk}
+					>
+						{t("chat.sendBtn")}
+					</Button>
+				</div>
+			</Modal>
 		</div>
 	);
 };

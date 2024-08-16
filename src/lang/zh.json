@@ -35,7 +35,8 @@
     },
     "chat": {
         "sendBtn": "发送",
-        "sendPlaceholder": "请输入..."
+        "sendPlaceholder": "请输入...",
+        "photoBtn": "点击拍照"
     },
     "userInfo": {
         "chatSeting": "设置语言",

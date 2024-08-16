@@ -180,3 +180,35 @@
 		opacity: 0.5;
 	}
 }
+.ant-modal-content {
+	background-color: rgb(17, 25, 40, 0.75) !important;
+	.ant-modal-close {
+		color: #fff;
+	}
+}
+.ant-modal-header {
+	background: transparent !important;
+	.ant-modal-title {
+		color: #fff;
+	}
+}
+.videoBox {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 12px;
+}
+.modalBottom {
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
+}
+.videoBox video {
+	width: 100%;
+	height: 100%;
+	border-radius: 16px;
+}
+.ant-modal-footer {
+	background-color: rgb(17, 25, 40, 0.75);
+}

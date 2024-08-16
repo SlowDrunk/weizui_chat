@@ -7,7 +7,7 @@
             "passwordPlaceholder": "Please enter password",
             "password": "Password",
             "signin": "Sign In",
-            "loginMessage":"Login successful, welcome back!"
+            "loginMessage": "Login successful, welcome back!"
         },
         "register": {
             "registerTitle": "Create an Account",
@@ -19,21 +19,22 @@
             "passwordPlaceholder": "Please enter password",
             "password": "Password",
             "signin": "Register",
-            "uploadImg":"Upload Avatar",
-            "registerMessage":"Registration successful, you can now log in!",
-            "passwordError":"Password can only contain numbers, letters, and special characters '!@#&?'.",
-            "emailError":"Invalid email format, please check and re-enter",
-            "uploadError":"You still need a nice avatar~"
+            "uploadImg": "Upload Avatar",
+            "registerMessage": "Registration successful, you can now log in!",
+            "passwordError": "Password can only contain numbers, letters, and special characters '!@#&?'.",
+            "emailError": "Invalid email format, please check and re-enter",
+            "uploadError": "You still need a nice avatar~"
         }
     },
     "loading": "Loading...",
-    "editUser":"Confirm the changes",
+    "editUser": "Confirm the changes",
     "userList": {
         "searchPlaceholder": "Search"
     },
     "chat": {
         "sendBtn": "Send",
-        "sendPlaceholder": "Please enter..."
+        "sendPlaceholder": "Please enter...",
+        "photoBtn": "Take Photo"
     },
     "userInfo": {
         "chatSeting": "Setting Language",

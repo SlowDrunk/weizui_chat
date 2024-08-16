@@ -16,6 +16,7 @@ const App = () => {
 	const { chatId } = useChatStore();
 	const { t } = useTranslation();
 	useEffect(() => {
+		console.log(currentUser);
 		const unSub = onAuthStateChanged(auth, (user) => {
 			fetchUserInfo(user?.uid);
 		});
