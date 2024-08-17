@@ -16,7 +16,7 @@ import { Space, Switch } from "antd";
 import { Image, Tooltip } from "antd";
 import { LangContext } from "../../lib/useLang";
 
-export default function Detial() {
+function Detial() {
 	const { t, i18n } = useTranslation();
 	const { lang, handleLang } = useContext(LangContext);
 	const [photos, setPhotos] = useState([]);
@@ -151,3 +151,5 @@ export default function Detial() {
 		</div>
 	);
 }
+
+export default React.memo(Detial);
