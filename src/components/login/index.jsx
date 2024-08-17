@@ -11,6 +11,8 @@ import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
 import { testEmail, testPassword } from "../../lib/testUtils";
 import { Radio } from "antd";
+import { LangContext } from "../../lib/useLang";
+import { useContext } from "react";
 
 const options = [
 	{ label: "中文", value: "zh" },
@@ -18,7 +20,8 @@ const options = [
 ];
 
 export default function Login() {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
+	const { lang, handleLang } = useContext(LangContext);
 	const [avatar, setAvatar] = useState({
 		file: null,
 		url: "",
@@ -26,7 +29,6 @@ export default function Login() {
 	const [registerLoading, setRegisterLoading] = useState(false);
 	const [loginLoading, setLoginLoading] = useState(false);
 	const [isLogin, setIsLogin] = useState(true);
-	const [lang, setLang] = useState(localStorage.getItem("lang"));
 
 	const handleAvatar = (e) => {
 		if (e.target.files[0]) {
@@ -103,25 +105,18 @@ export default function Login() {
 			});
 		} catch (e) {
 			toast.error(e.message);
-			console.log(e);
 		} finally {
 			setRegisterLoading(false);
 		}
 	};
-	const handleLang = (e) => {
-		if (e.target.value) {
-			setLang(e.target.value);
-			i18n.changeLanguage(e.target.value);
-			localStorage.setItem("lang", e.target.value);
-		}
-	};
+
 	return (
 		<div className="login">
 			<div className="lang">
 				<h4>设置语言</h4>
 				<Radio.Group
 					options={options}
-					onChange={(events) => handleLang(events)}
+					onChange={(events) => handleLang(events.target.value)}
 					value={lang}
 				/>
 			</div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./detial.css";
 import { useTranslation } from "react-i18next";
 import { useUserStore } from "../../lib/userStore";
@@ -7,24 +7,22 @@ import {
 	arrayRemove,
 	arrayUnion,
 	doc,
-	getDoc,
 	onSnapshot,
 	updateDoc,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Space, Switch } from "antd";
-import { handleDownload } from "../../lib/useDownload";
 import { Image, Tooltip } from "antd";
+import { LangContext } from "../../lib/useLang";
 
 export default function Detial() {
 	const { t, i18n } = useTranslation();
-	const [lang, setLang] = useState(localStorage.getItem("lang"));
+	const { lang, handleLang } = useContext(LangContext);
 	const [photos, setPhotos] = useState([]);
 	const [chats, setChats] = useState();
 	const [showPhotos, setShowPhotos] = useState(false);
-	const { fetchUserInfo, currentUser } = useUserStore();
+	const { currentUser } = useUserStore();
 	const {
 		chatId,
 		user,
@@ -78,13 +76,6 @@ export default function Detial() {
 		resetChat();
 	};
 
-	const handleLang = (val) => {
-		i18n.changeLanguage(val ? "zh" : "en");
-		setLang(val ? "zh" : "en");
-		i18n.changeLanguage(val ? "zh" : "en");
-		localStorage.setItem("lang", val ? "zh" : "en");
-	};
-
 	return (
 		<div className="detail">
 			<div className="user">
@@ -107,8 +98,10 @@ export default function Detial() {
 								<Switch
 									checkedChildren="中文"
 									unCheckedChildren="english"
-									defaultChecked
-									onChange={(val) => handleLang(val)}
+									defaultChecked={lang === "zh"}
+									onChange={(val) =>
+										handleLang(val ? "zh" : "en")
+									}
 								/>
 							</Space>
 						</div>

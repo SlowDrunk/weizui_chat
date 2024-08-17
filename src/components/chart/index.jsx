@@ -14,7 +14,7 @@ import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-import { Image, Modal, Button } from "antd";
+import { Image, Modal, Button, Spin } from "antd";
 import { CameraOutlined, SendOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { base64ToFile } from "../../utils/base64ToFile.js";
@@ -28,6 +28,7 @@ const Chat = () => {
 	// 语音识别实例对象
 	let recognition =
 		new window.webkitSpeechRecognition() || new window.SpeechRecognition();
+
 	const { t } = useTranslation();
 	const [img, setImg] = useState({
 		file: null,
@@ -43,6 +44,9 @@ const Chat = () => {
 	useEffect(() => {
 		recognition.continuous = true;
 		recognition.lang = "zh-CN";
+	}, []);
+
+	useEffect(() => {
 		const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
 			setChat(res.data());
 		});
@@ -186,155 +190,177 @@ const Chat = () => {
 	};
 
 	return (
-		<div className="chat">
-			<div className="top">
-				<div className="user">
-					<img src={user?.avatar || "./avatar.png"} alt="" />
-					<div className="texts">
-						<span>{user?.username}</span>
-						<p
-							style={{
-								color: user?.signature ? "#ffffff" : "#cccccc",
-							}}
-						>
-							{user?.signature ? user.signature : t("signature")}
-						</p>
+		<>
+			{user ? (
+				<div className="chat">
+					<div className="top">
+						<div className="user">
+							<img src={user?.avatar || "./avatar.png"} alt="" />
+							<div className="texts">
+								<span>{user?.username}</span>
+								<p
+									style={{
+										color: user?.signature
+											? "#ffffff"
+											: "#cccccc",
+									}}
+								>
+									{user?.signature
+										? user.signature
+										: t("signature")}
+								</p>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div className="center">
-				{chat?.messages?.map((message, index) => (
-					<div
-						className={
-							message.senderId === currentUser?.id
-								? "message own"
-								: "message"
-						}
-						key={index}
-					>
-						<div className="texts">
-							{message.img && <Image src={message.img} alt="" />}
-							{message.text && (
-								<div>
-									<p>{message.text}</p>
-									<span>
-										{dayjs(message.createdAt).format(
-											"HH:mm A"
-										)}
-									</span>
+					<div className="center">
+						{chat?.messages?.map((message, index) => (
+							<div
+								className={
+									message.senderId === currentUser?.id
+										? "message own"
+										: "message"
+								}
+								key={index}
+							>
+								<div className="texts">
+									{message.img && (
+										<Image src={message.img} alt="" />
+									)}
+									{message.text && (
+										<div>
+											<p>{message.text}</p>
+											<span>
+												{dayjs(
+													message.createdAt
+												).format("HH:mm A")}
+											</span>
+										</div>
+									)}
 								</div>
-							)}
+							</div>
+						))}
+						{img.url && (
+							<div className="message own">
+								<div className="texts">
+									<Image src={img.url} alt="" />
+								</div>
+							</div>
+						)}
+						<div ref={endRef}></div>
+					</div>
+					<div className="bottom">
+						<div className="icons">
+							<label htmlFor="file">
+								<img src="./img.png" alt="" />
+							</label>
+							<input
+								type="file"
+								id="file"
+								style={{ display: "none" }}
+								onChange={handleImg}
+							/>
+							<img
+								src="./camera.png"
+								alt=""
+								onClick={handleCamera}
+							/>
+							<img
+								className={isRecoginition ? "mic" : ""}
+								src="./mic.png"
+								onClick={() => {
+									if (isRecoginition) {
+										recognition.stop();
+										setIsRecoginition(false);
+									} else {
+										recognition.start();
+										setIsRecoginition(true);
+									}
+								}}
+								alt=""
+							/>
 						</div>
-					</div>
-				))}
-				{img.url && (
-					<div className="message own">
-						<div className="texts">
-							<Image src={img.url} alt="" />
+						<input
+							type="text"
+							placeholder={t("chat.sendPlaceholder")}
+							value={text}
+							onChange={(e) => setText(e.target.value)}
+							disabled={isCurrentUserBlocked || isReceiverBlocked}
+						/>
+						<div className="emoji">
+							<img
+								src="./emoji.png"
+								alt=""
+								onClick={() => setOpen((prev) => !prev)}
+							/>
+							<div className="picker">
+								<EmojiPicker
+									open={open}
+									onEmojiClick={handleEmoji}
+								/>
+							</div>
 						</div>
+						<button
+							className="sendButton"
+							onClick={() => {
+								handleSend("text");
+							}}
+							disabled={isCurrentUserBlocked || isReceiverBlocked}
+						>
+							{t("chat.sendBtn")}
+						</button>
 					</div>
-				)}
-				<div ref={endRef}></div>
-			</div>
-			<div className="bottom">
-				<div className="icons">
-					<label htmlFor="file">
-						<img src="./img.png" alt="" />
-					</label>
-					<input
-						type="file"
-						id="file"
-						style={{ display: "none" }}
-						onChange={handleImg}
-					/>
-					<img src="./camera.png" alt="" onClick={handleCamera} />
-					<img
-						className={isRecoginition ? "mic" : ""}
-						src="./mic.png"
-						onClick={() => {
-							if (isRecoginition) {
-								recognition.start();
-							} else {
-								recognition.stop();
-							}
-							setIsRecoginition((pre) => !pre);
-						}}
-						alt=""
-					/>
-				</div>
-				<input
-					type="text"
-					placeholder={t("chat.sendPlaceholder")}
-					value={text}
-					onChange={(e) => setText(e.target.value)}
-					disabled={isCurrentUserBlocked || isReceiverBlocked}
-				/>
-				<div className="emoji">
-					<img
-						src="./emoji.png"
-						alt=""
-						onClick={() => setOpen((prev) => !prev)}
-					/>
-					<div className="picker">
-						<EmojiPicker open={open} onEmojiClick={handleEmoji} />
-					</div>
-				</div>
-				<button
-					className="sendButton"
-					onClick={() => {
-						handleSend("text");
-					}}
-					disabled={isCurrentUserBlocked || isReceiverBlocked}
-				>
-					{t("chat.sendBtn")}
-				</button>
-			</div>
-			<Modal
-				title="Basic Modal"
-				open={isModalOpen}
-				onCancel={handleCancel}
-				footer={null}
-			>
-				<div className="videoBox">
-					<video
-						ref={videoRef}
-						style={{
-							display: img.url ? "none" : "block",
-						}}
-						id="video"
-						autoPlay
-					></video>
-					<canvas
-						ref={canvasRef}
-						style={{
-							display: img.url ? "block" : "none",
-							borderRadius: "16px",
-						}}
-						width="472"
-						height="354"
-					></canvas>
-				</div>
-				<div className="modalBottom">
-					<Button
-						style={{ flex: 1 }}
-						icon={<CameraOutlined />}
-						onClick={() => {
-							DrawPicture();
-						}}
+					<Modal
+						title="Basic Modal"
+						open={isModalOpen}
+						onCancel={handleCancel}
+						footer={null}
 					>
-						{t("chat.photoBtn")}
-					</Button>
-					<Button
-						style={{ flex: 1 }}
-						type="primary"
-						icon={<SendOutlined />}
-						onClick={handleOk}
-					>
-						{t("chat.sendBtn")}
-					</Button>
+						<div className="videoBox">
+							<video
+								ref={videoRef}
+								style={{
+									display: img.url ? "none" : "block",
+								}}
+								id="video"
+								autoPlay
+							></video>
+							<canvas
+								ref={canvasRef}
+								style={{
+									display: img.url ? "block" : "none",
+									borderRadius: "16px",
+								}}
+								width="472"
+								height="354"
+							></canvas>
+						</div>
+						<div className="modalBottom">
+							<Button
+								style={{ flex: 1 }}
+								icon={<CameraOutlined />}
+								onClick={() => {
+									DrawPicture();
+								}}
+							>
+								{t("chat.photoBtn")}
+							</Button>
+							<Button
+								style={{ flex: 1 }}
+								type="primary"
+								icon={<SendOutlined />}
+								onClick={handleOk}
+							>
+								{t("chat.sendBtn")}
+							</Button>
+						</div>
+					</Modal>
 				</div>
-			</Modal>
-		</div>
+			) : (
+				<div className="noChat">
+					<Spin />
+				</div>
+			)}
+		</>
 	);
 };
 

@@ -7,19 +7,15 @@ import { Dropdown, Space, Switch } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { auth } from "../../../lib/firebase";
+import { LangContext } from "../../../lib/useLang";
+import { useContext } from "react";
 
 export default function UserInfo() {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 	const { currentUser } = useUserStore();
 	const [updateUser, setUpdateUser] = useState(false);
-	const [lang, setLang] = useState(localStorage.getItem("lang") || "zh");
+	const { lang, handleLang } = useContext(LangContext);
 
-	const handleLang = (val) => {
-		i18n.changeLanguage(val ? "zh" : "en");
-		setLang(val ? "zh" : "en");
-		i18n.changeLanguage(val ? "zh" : "en");
-		localStorage.setItem("lang", val ? "zh" : "en");
-	};
 	const items = [
 		{
 			key: "1",
@@ -32,8 +28,8 @@ export default function UserInfo() {
 						<Switch
 							checkedChildren="中文"
 							unCheckedChildren="english"
-							defaultChecked
-							onChange={(val) => handleLang(val)}
+							defaultChecked={lang === "zh" ? true : false}
+							onChange={(val) => handleLang(val ? "zh" : "en")}
 						/>
 					</Space>
 				</div>
