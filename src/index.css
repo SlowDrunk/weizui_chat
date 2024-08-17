@@ -60,3 +60,6 @@ ul {
 		color: #ffffff !important;
 	}
 }
+.ant-image-mask {
+	border-radius: 10px !important;
+}

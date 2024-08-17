@@ -30,6 +30,7 @@ const Chat = () => {
 		new window.webkitSpeechRecognition() || new window.SpeechRecognition();
 
 	const { t } = useTranslation();
+	const [imgPreviewList, setImgPreviewList] = useState([]);
 	const [img, setImg] = useState({
 		file: null,
 		url: "",
@@ -49,6 +50,12 @@ const Chat = () => {
 	useEffect(() => {
 		const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
 			setChat(res.data());
+			setImgPreviewList(
+				res
+					.data()
+					.messages.filter((item) => item.img)
+					.map((ele) => ele.img)
+			);
 		});
 		return () => {
 			unSub();
@@ -224,7 +231,11 @@ const Chat = () => {
 							>
 								<div className="texts">
 									{message.img && (
-										<Image src={message.img} alt="" />
+										<Image.PreviewGroup
+											items={imgPreviewList}
+										>
+											<Image src={message.img} />
+										</Image.PreviewGroup>
 									)}
 									{message.text && (
 										<div>
@@ -364,4 +375,4 @@ const Chat = () => {
 	);
 };
 
-export default Chat;
+export default React.memo(Chat);

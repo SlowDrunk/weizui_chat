@@ -126,7 +126,11 @@ function Detial() {
 							photos.map((photo) => (
 								<div className="photoItem" key={photo.id}>
 									<div className="photoDetail">
-										<Image src={photo.img} alt="" />
+										<Image.PreviewGroup
+											items={photos.map((ele) => ele.img)}
+										>
+											<Image src={photo.img} />
+										</Image.PreviewGroup>
 										<Tooltip title={photo.id}>
 											<span>{photo.id}</span>
 										</Tooltip>

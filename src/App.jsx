@@ -37,13 +37,11 @@ const App = () => {
 		<div className="container">
 			{currentUser ? (
 				<LangContext.Provider value={{ lang, handleLang }}>
-					(
 					<>
 						<List />
 						{chatId && <Chart />}
 						{chatId && <Detial />}
 					</>
-					)
 				</LangContext.Provider>
 			) : (
 				<LangContext.Provider value={{ lang, handleLang }}>
