@@ -34,7 +34,8 @@
     "chat": {
         "sendBtn": "Send",
         "sendPlaceholder": "Please enter...",
-        "photoBtn": "Take Photo"
+        "photoBtn": "Take Photo",
+        "camera": "Camera"
     },
     "userInfo": {
         "chatSeting": "Setting Language",

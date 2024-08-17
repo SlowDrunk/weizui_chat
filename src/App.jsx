@@ -21,10 +21,12 @@ const App = () => {
 		const unSub = onAuthStateChanged(auth, (user) => {
 			fetchUserInfo(user?.uid);
 		});
+		i18n.changeLanguage(lang);
 		return () => {
 			unSub();
 		};
-	}, [fetchUserInfo]);
+	}, [fetchUserInfo, lang]);
+
 	// 加载页
 	if (isLoading) return <div className="loading">{t("loading")}</div>;
 

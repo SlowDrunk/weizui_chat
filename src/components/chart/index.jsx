@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
 import {
@@ -321,7 +321,7 @@ const Chat = () => {
 						</button>
 					</div>
 					<Modal
-						title="Basic Modal"
+						title={t("chat.camera")}
 						open={isModalOpen}
 						onCancel={handleCancel}
 						footer={null}
