@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import { useTranslation } from "react-i18next";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 import upload from "../../../../lib/upload";
 import { useUserStore } from "../../../../lib/userStore";
 import { testEmail, testPassword } from "../../../../lib/testUtils";
 import { auth } from "../../../../lib/firebase";
 import { toast } from "react-toastify";
+import CopperImage from "../../../CopperImage";
 
 export default function UpdateUser(props) {
 	const { setUpdateUser } = props;
@@ -19,6 +20,8 @@ export default function UpdateUser(props) {
 		file: null,
 		url: "",
 	});
+	const [uploadImg, setUploadImg] = useState(false);
+
 	useEffect(() => {
 		setAvatar({
 			file: currentUser.avatar,
@@ -31,14 +34,14 @@ export default function UpdateUser(props) {
 			: "";
 	}, [currentUser]);
 
-	const handleAvatar = (e) => {
-		debugger;
-		if (e.target.files[0]) {
-			setAvatar({
-				file: e.target.files[0],
-				url: URL.createObjectURL(e.target.files[0]),
-			});
-		}
+	const handleAvatar = () => {
+		// if (e.target.files[0]) {
+		// 	setAvatar({
+		// 		file: e.target.files[0],
+		// 		url: URL.createObjectURL(e.target.files[0]),
+		// 	});
+		// }
+		setUploadImg(true);
 	};
 
 	const handleSubmit = async (e) => {
@@ -84,19 +87,19 @@ export default function UpdateUser(props) {
 		<div className="update-user">
 			<div className="item">
 				<form action="" onSubmit={handleSubmit} ref={updateForm}>
-					<label htmlFor="file">
+					<label onClick={handleAvatar}>
 						<img
 							src={avatar.url ? avatar.url : "./avatar.png"}
 							alt=""
 						/>
 						{t("login.register.uploadImg")}
 					</label>
-					<input
+					{/* <input
 						type="file"
 						id="file"
 						style={{ display: "none" }}
 						onChange={(e) => handleAvatar(e)}
-					/>
+					/> */}
 					<input
 						type="text"
 						placeholder={t("login.register.usernamePlaceholder")}
@@ -124,6 +127,17 @@ export default function UpdateUser(props) {
 					</div>
 				</form>
 			</div>
+			<CopperImage
+				isOpen={uploadImg}
+				handleSend={(type, file) => {
+					setAvatar({
+						file: file,
+						url: URL.createObjectURL(file),
+					});
+					setUploadImg(false);
+				}}
+				handleClose={setUploadImg}
+			/>
 		</div>
 	);
 }

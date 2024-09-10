@@ -112,7 +112,7 @@
 	.bottom {
 		padding: 20px;
 		display: flex;
-		align-items: center;
+		flex-direction: column;
 		justify-content: space-between;
 		border-top: 1px solid #dddddd35;
 		gap: 20px;
@@ -121,18 +121,19 @@
 		.icons {
 			display: flex;
 			gap: 20px;
+			.cut,
+			img {
+				width: 20px;
+				height: 20px;
+				cursor: pointer;
+			}
 		}
 
-		img {
-			width: 20px;
-			height: 20px;
-			cursor: pointer;
-		}
 		.mic {
 			animation: mic 2s infinite linear;
 		}
 
-		input {
+		textarea {
 			flex: 1;
 			background-color: rgba(17, 25, 40, 0.5);
 			border: none;
@@ -141,6 +142,7 @@
 			padding: 20px;
 			border-radius: 10px;
 			font-size: 16px;
+			resize: none;
 
 			&:disabled {
 				cursor: not-allowed;

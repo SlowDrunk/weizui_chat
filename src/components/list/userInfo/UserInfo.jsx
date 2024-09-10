@@ -67,7 +67,6 @@ export default function UserInfo() {
 						<img className="icon" src="./more.png" alt="" />
 					</Space>
 				</Dropdown>
-				<img className="icon" src="./video.png" alt="" />
 				<img
 					className="icon"
 					src="./edit.png"

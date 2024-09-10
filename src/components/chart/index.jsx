@@ -18,6 +18,7 @@ import { Image, Modal, Button, Spin } from "antd";
 import { CameraOutlined, SendOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { base64ToFile } from "../../utils/base64ToFile.js";
+import CopperImage from "../CopperImage/index.jsx";
 
 const Chat = () => {
 	const [chat, setChat] = useState();
@@ -25,6 +26,8 @@ const Chat = () => {
 	const [text, setText] = useState("");
 	const [isRecoginition, setIsRecoginition] = useState(false);
 	const [isModalOpen, setIsModelOpen] = useState(false);
+	const [uploadImg, setUploadImg] = useState(false);
+	const CopperImageRef = useRef(null);
 	// 语音识别实例对象
 	let recognition =
 		new window.webkitSpeechRecognition() || new window.SpeechRecognition();
@@ -127,15 +130,12 @@ const Chat = () => {
 				url: "",
 			});
 			setText("");
+			setUploadImg(false);
 		}
 	};
 
-	const handleImg = (e) => {
-		setImg({
-			file: e.target.files[0],
-			url: URL.createObjectURL(e.target.files[0]),
-		});
-		handleSend("picture", e.target.files[0]);
+	const handleImg = () => {
+		setUploadImg(true);
 	};
 
 	const handleCamera = () => {
@@ -261,20 +261,25 @@ const Chat = () => {
 					</div>
 					<div className="bottom">
 						<div className="icons">
-							<label htmlFor="file">
-								<img src="./img.png" alt="" />
-							</label>
-							<input
-								type="file"
-								id="file"
-								style={{ display: "none" }}
-								onChange={handleImg}
-							/>
+							<div className="emoji">
+								<img
+									src="./emoji.png"
+									alt=""
+									onClick={() => setOpen((prev) => !prev)}
+								/>
+								<div className="picker">
+									<EmojiPicker
+										open={open}
+										onEmojiClick={handleEmoji}
+									/>
+								</div>
+							</div>
 							<img
 								src="./camera.png"
 								alt=""
 								onClick={handleCamera}
 							/>
+							<img src="./img.png" alt="" onClick={handleImg} />
 							<img
 								className={isRecoginition ? "mic" : ""}
 								src="./mic.png"
@@ -289,36 +294,26 @@ const Chat = () => {
 								}}
 								alt=""
 							/>
+							<div className="cut">
+								<ion-icon
+									style={{ width: "100%", height: "100%" }}
+									name="cut-outline"
+								></ion-icon>
+							</div>
 						</div>
-						<input
+						<textarea
 							type="text"
 							placeholder={t("chat.sendPlaceholder")}
 							value={text}
 							onChange={(e) => setText(e.target.value)}
 							disabled={isCurrentUserBlocked || isReceiverBlocked}
-						/>
-						<div className="emoji">
-							<img
-								src="./emoji.png"
-								alt=""
-								onClick={() => setOpen((prev) => !prev)}
-							/>
-							<div className="picker">
-								<EmojiPicker
-									open={open}
-									onEmojiClick={handleEmoji}
-								/>
-							</div>
-						</div>
-						<button
-							className="sendButton"
-							onClick={() => {
-								handleSend("text");
+							onKeyUp={(e) => {
+								e.preventDefault();
+								if (e.code === "Enter") {
+									handleSend("text");
+								}
 							}}
-							disabled={isCurrentUserBlocked || isReceiverBlocked}
-						>
-							{t("chat.sendBtn")}
-						</button>
+						/>
 					</div>
 					<Modal
 						title={t("chat.camera")}
@@ -365,6 +360,11 @@ const Chat = () => {
 							</Button>
 						</div>
 					</Modal>
+					<CopperImage
+						isOpen={uploadImg}
+						handleSend={handleSend}
+						handleClose={setUploadImg}
+					></CopperImage>
 				</div>
 			) : (
 				<div className="noChat">
