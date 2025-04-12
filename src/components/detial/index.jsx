@@ -143,10 +143,10 @@ function Detial() {
 			<div className="button-container">
 				<button onClick={handleBlock}>
 					{isCurrentUserBlocked
-						? "You Are Blocked!"
+						? t("detail.YouAreBlocked")
 						: isReceiverBlocked
-						? "User Blocked You!"
-						: "Block User"}
+						? t("detail.UserBlockedYou")
+						: t("detail.BlockUser")}
 				</button>
 				<button className="logout" onClick={handleLogout}>
 					{t("userInfo.loginOut")}

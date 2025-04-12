@@ -184,6 +184,14 @@ export default function Login() {
 						/>
 
 						<div className="button-box">
+							<button
+								onClick={() => setIsLogin(true)}
+								disabled={loginLoading}
+							>
+								{loginLoading
+									? t("loading")
+									: t("login.signUp.signin")}
+							</button>
 							<button disabled={registerLoading}>
 								{registerLoading
 									? t("loading")

@@ -45,5 +45,10 @@
         "loginOut": "Log Out"
     },
     "uploadError": "Oh, something went wrong~",
-    "signature": "This man was lazy and left nothing behind."
+    "signature": "This man was lazy and left nothing behind.",
+    "detail": {
+        "YouAreBlocked": "You Are Blocked.",
+        "UserBlockedYou": "User Blocked You.",
+        "BlockUser": "Block User"
+    }
 }

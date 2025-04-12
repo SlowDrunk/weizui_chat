@@ -37,7 +37,7 @@
         "sendBtn": "发送",
         "sendPlaceholder": "请输入...",
         "photoBtn": "点击拍照",
-        "camera":"拍照"
+        "camera": "拍照"
     },
     "userInfo": {
         "chatSeting": "设置语言",
@@ -47,5 +47,10 @@
         "loginOut": "退出登陆"
     },
     "uploadError": "哦,出现了一些问题~",
-    "signature": "这个人很懒什么都没留下"
+    "signature": "这个人很懒什么都没留下",
+    "detail": {
+        "YouAreBlocked": "您已被该用户拉黑",
+        "UserBlockedYou": "您已拉黑该用户",
+        "BlockUser": "拉黑该用户"
+    }
 }
