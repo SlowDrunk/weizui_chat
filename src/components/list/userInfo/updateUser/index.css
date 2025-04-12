@@ -15,6 +15,17 @@
 	align-items: center;
 	gap: 80px;
 	z-index: 1000;
+	.close-icon {
+		position: absolute;
+		top: 20px;
+		right: 30px;
+		cursor: pointer;
+		opacity: 0.6;
+		transition: all 0.3s ease-in-out;
+		&:hover {
+			opacity: 1;
+		}
+	}
 	.item {
 		width: 100%;
 		display: flex;

@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useUserStore } from "../../../../lib/userStore";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { CloseOutlined } from "@ant-design/icons";
 
 export default function AddUser(props) {
 	const { setAddMode } = props;
@@ -47,7 +48,7 @@ export default function AddUser(props) {
 		const chatRef = collection(db, "chats");
 
 		const userChatsRef = collection(db, "userchats");
-		
+
 		try {
 			const newChatRef = doc(chatRef);
 
@@ -84,6 +85,9 @@ export default function AddUser(props) {
 	};
 	return (
 		<div className="addUser">
+			<div className="close-icon" onClick={() => setAddMode(false)}>
+				<CloseOutlined />
+			</div>
 			<form action="" onSubmit={handleSearch}>
 				<input type="text" placeholder="用户名" name="username" />
 				<button>{t("userList.searchPlaceholder")}</button>

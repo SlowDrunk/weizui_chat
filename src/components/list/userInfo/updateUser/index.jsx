@@ -9,6 +9,7 @@ import { testEmail, testPassword } from "../../../../lib/testUtils";
 import { auth } from "../../../../lib/firebase";
 import { toast } from "react-toastify";
 import CopperImage from "../../../CopperImage";
+import { CloseOutlined } from "@ant-design/icons";
 
 export default function UpdateUser(props) {
 	const { setUpdateUser } = props;
@@ -85,6 +86,9 @@ export default function UpdateUser(props) {
 	};
 	return (
 		<div className="update-user">
+			<div className="close-icon" onClick={() => setUpdateUser(false)}>
+				<CloseOutlined />
+			</div>
 			<div className="item">
 				<form action="" onSubmit={handleSubmit} ref={updateForm}>
 					<label onClick={handleAvatar}>
