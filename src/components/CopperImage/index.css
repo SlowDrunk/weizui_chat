@@ -6,7 +6,7 @@
 	padding: 0 24px;
 
 	.title {
-		color: #fff;
+		color: var(--primaryText);
 		font-size: 18px;
 		font-weight: bold;
 	}

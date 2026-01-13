@@ -27,7 +27,6 @@ const Chat = () => {
 	const [isRecoginition, setIsRecoginition] = useState(false);
 	const [isModalOpen, setIsModelOpen] = useState(false);
 	const [uploadImg, setUploadImg] = useState(false);
-	const CopperImageRef = useRef(null);
 	// 语音识别实例对象
 	let recognition =
 		new window.webkitSpeechRecognition() || new window.SpeechRecognition();
@@ -205,13 +204,7 @@ const Chat = () => {
 							<img src={user?.avatar || "./avatar.png"} alt="" />
 							<div className="texts">
 								<span>{user?.username}</span>
-								<p
-									style={{
-										color: user?.signature
-											? "#ffffff"
-											: "#cccccc",
-									}}
-								>
+								<p>
 									{user?.signature
 										? user.signature
 										: t("signature")}
@@ -294,12 +287,13 @@ const Chat = () => {
 								}}
 								alt=""
 							/>
-							<div className="cut">
+							{/* TODO: 添加截图功能 */}
+							{/* <div className="cut" onClick={() => setIsScreenshotOpen(true)}>
 								<ion-icon
 									style={{ width: "100%", height: "100%" }}
 									name="cut-outline"
 								></ion-icon>
-							</div>
+							</div> */}
 						</div>
 						<textarea
 							type="text"

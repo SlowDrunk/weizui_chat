@@ -112,95 +112,173 @@ export default function Login() {
 
 	return (
 		<div className="login">
-			<div className="lang">
-				<h4>设置语言</h4>
-				<Radio.Group
-					options={options}
-					onChange={(events) => handleLang(events.target.value)}
-					value={lang}
-				/>
+			{/* 左侧品牌展示区 */}
+			<div className="login-left">
+				<div className="brand-section">
+					<div className="logo-container">
+						<div className="logo-circle">
+							<span className="logo-text">WZ</span>
+						</div>
+					</div>
+					<h1 className="brand-title">欢迎使用</h1>
+					<p className="brand-subtitle">安全、便捷的即时通讯平台</p>
+					<div className="brand-features">
+						<div className="feature-item">
+							<div className="feature-icon">💬</div>
+							<span>实时聊天</span>
+						</div>
+						<div className="feature-item">
+							<div className="feature-icon">🔒</div>
+							<span>安全加密</span>
+						</div>
+						<div className="feature-item">
+							<div className="feature-icon">📱</div>
+							<span>多端同步</span>
+						</div>
+					</div>
+				</div>
 			</div>
-			{isLogin ? (
-				<div className="item">
-					<h2>{t("login.signUp.singUpTitle")}</h2>
-					<form onSubmit={handleLogin}>
-						<input
-							type="text"
-							name="email"
-							placeholder={t("login.signUp.usernamePlaceholder")}
-						/>
-						<input
-							type="password"
-							name="password"
-							placeholder={t("login.signUp.passwordPlaceholder")}
-						/>
-						<div className="button-box">
-							<button type="submit" disabled={loginLoading}>
-								{loginLoading
-									? t("loading")
-									: t("login.signUp.signin")}
-							</button>
-							<button onClick={() => setIsLogin(false)}>
-								{t("login.register.signin")}
-							</button>
-						</div>
-					</form>
-				</div>
-			) : (
-				<div className="item">
-					<h2>{t("login.signUp.singUpTitle")}</h2>
-					<form action="" onSubmit={handleRegister}>
-						<label htmlFor="file">
-							<img
-								src={avatar.url ? avatar.url : "./avatar.png"}
-								alt=""
-							/>
-							{t("login.register.uploadImg")}
-						</label>
-						<input
-							type="file"
-							id="file"
-							style={{ display: "none" }}
-							onChange={(e) => handleAvatar(e)}
-						/>
-						<input
-							type="text"
-							placeholder={t(
-								"login.register.usernamePlaceholder"
-							)}
-							name="username"
-						/>
-						<input
-							type="text"
-							placeholder={t("login.register.emailPlaceholder")}
-							name="email"
-						/>
-						<input
-							type="password"
-							placeholder={t(
-								"login.register.passwordPlaceholder"
-							)}
-							name="password"
-						/>
 
-						<div className="button-box">
-							<button
-								onClick={() => setIsLogin(true)}
-								disabled={loginLoading}
-							>
-								{loginLoading
-									? t("loading")
-									: t("login.signUp.signin")}
-							</button>
-							<button disabled={registerLoading}>
-								{registerLoading
-									? t("loading")
-									: t("login.register.signin")}
-							</button>
-						</div>
-					</form>
+			{/* 分隔线 */}
+			<div className="separator"></div>
+
+			{/* 右侧表单区 */}
+			<div className="login-right">
+				{/* 语言切换 */}
+				<div className="lang-switcher">
+					<Radio.Group
+						options={options}
+						onChange={(events) => handleLang(events.target.value)}
+						value={lang}
+						size="small"
+					/>
 				</div>
-			)}
+
+				{isLogin ? (
+					<div className="form-container">
+						<div className="form-header">
+							<h2>{t("login.signUp.singUpTitle")}</h2>
+							<p className="form-subtitle">登录您的账户以继续</p>
+						</div>
+						<form onSubmit={handleLogin} className="login-form">
+							<div className="input-group">
+								<label>{t("login.signUp.usernamePlaceholder")}</label>
+								<input
+									type="text"
+									name="email"
+									placeholder={t("login.signUp.usernamePlaceholder")}
+								/>
+							</div>
+							<div className="input-group">
+								<label>{t("login.signUp.passwordPlaceholder")}</label>
+								<input
+									type="password"
+									name="password"
+									placeholder={t("login.signUp.passwordPlaceholder")}
+								/>
+							</div>
+							<div className="button-box">
+								<button type="submit" className="btn-primary" disabled={loginLoading}>
+									{loginLoading
+										? t("loading")
+										: t("login.signUp.signin")}
+								</button>
+							</div>
+							<div className="form-footer">
+								<span>还没有账户？</span>
+								<button
+									type="button"
+									className="link-button"
+									onClick={() => setIsLogin(false)}
+								>
+									{t("login.register.signin")}
+								</button>
+							</div>
+						</form>
+					</div>
+				) : (
+					<div className="form-container">
+						<div className="form-header">
+							<h2>{t("login.register.signin")}</h2>
+							<p className="form-subtitle">创建新账户，开始您的旅程</p>
+						</div>
+						<form action="" onSubmit={handleRegister} className="login-form">
+							<div className="avatar-upload">
+								<label htmlFor="file" className="avatar-label">
+									<div className="avatar-preview">
+										<img
+											src={avatar.url ? avatar.url : "./avatar.png"}
+											alt=""
+										/>
+										<div className="avatar-overlay">
+											<span>📷</span>
+										</div>
+									</div>
+									<span className="upload-text">{t("login.register.uploadImg")}</span>
+								</label>
+								<input
+									type="file"
+									id="file"
+									style={{ display: "none" }}
+									onChange={(e) => handleAvatar(e)}
+									accept="image/*"
+								/>
+							</div>
+							<div className="input-group">
+								<label>{t("login.register.usernamePlaceholder")}</label>
+								<input
+									type="text"
+									placeholder={t("login.register.usernamePlaceholder")}
+									name="username"
+								/>
+							</div>
+							<div className="input-group">
+								<label>{t("login.register.emailPlaceholder")}</label>
+								<input
+									type="text"
+									placeholder={t("login.register.emailPlaceholder")}
+									name="email"
+								/>
+							</div>
+							<div className="input-group">
+								<label>{t("login.register.passwordPlaceholder")}</label>
+								<input
+									type="password"
+									placeholder={t("login.register.passwordPlaceholder")}
+									name="password"
+								/>
+							</div>
+							<div className="button-box">
+								<button
+									type="button"
+									className="btn-secondary"
+									onClick={() => setIsLogin(true)}
+									disabled={loginLoading}
+								>
+									{loginLoading
+										? t("loading")
+										: t("login.signUp.signin")}
+								</button>
+								<button type="submit" className="btn-primary" disabled={registerLoading}>
+									{registerLoading
+										? t("loading")
+										: t("login.register.signin")}
+								</button>
+							</div>
+							<div className="form-footer">
+								<span>已有账户？</span>
+								<button
+									type="button"
+									className="link-button"
+									onClick={() => setIsLogin(true)}
+								>
+									立即登录
+								</button>
+							</div>
+						</form>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

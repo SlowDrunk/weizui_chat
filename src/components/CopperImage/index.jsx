@@ -91,7 +91,6 @@ export default function CopperImage({ file, handleSend, isOpen, handleClose }) {
 							</Button>
 						</Upload>
 						<Button
-							inline
 							className="button"
 							type="primary"
 							loading={loading}

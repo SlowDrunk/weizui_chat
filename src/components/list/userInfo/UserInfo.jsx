@@ -4,17 +4,19 @@ import { useUserStore } from "../../../lib/userStore";
 import { useState } from "react";
 import UpdateUser from "./updateUser";
 import { Dropdown, Space, Switch } from "antd";
-import { LogoutOutlined } from "@ant-design/icons";
+import { LogoutOutlined, BulbOutlined, MoonOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { auth } from "../../../lib/firebase";
 import { LangContext } from "../../../lib/useLang";
 import { useContext } from "react";
+import { useThemeStore } from "../../../lib/themeStore";
 
 export default function UserInfo() {
 	const { t } = useTranslation();
 	const { currentUser } = useUserStore();
 	const [updateUser, setUpdateUser] = useState(false);
 	const { lang, handleLang } = useContext(LangContext);
+	const { theme, toggleTheme } = useThemeStore();
 
 	const items = [
 		{
@@ -37,6 +39,24 @@ export default function UserInfo() {
 		},
 		{
 			key: "2",
+			label: (
+				<div className="set-lang">
+					<span style={{ marginRight: "16px" }}>
+						{theme === "light" ? "深色模式" : "浅色模式"}
+					</span>
+					<Space direction="vertical">
+						<Switch
+							checkedChildren={<MoonOutlined />}
+							unCheckedChildren={<BulbOutlined />}
+							checked={theme === "dark"}
+							onChange={toggleTheme}
+						/>
+					</Space>
+				</div>
+			),
+		},
+		{
+			key: "3",
 			label: (
 				<div className="set-lang" onClick={() => auth.signOut()}>
 					<Space direction="vertical" style={{ marginRight: "16px" }}>

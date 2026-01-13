@@ -11,13 +11,20 @@ import { useUserStore } from "./lib/userStore";
 import { useChatStore } from "./lib/chatStore";
 import { useTranslation } from "react-i18next";
 import { LangContext } from "./lib/useLang";
+import { useThemeStore } from "./lib/themeStore";
 
 const App = () => {
 	const { currentUser, isLoading, fetchUserInfo } = useUserStore();
 	const { chatId } = useChatStore();
 	const { t, i18n } = useTranslation();
 	const [lang, setLang] = useState(localStorage.getItem("lang") || "zh");
+	const { setTheme } = useThemeStore();
+	
 	useEffect(() => {
+		// 初始化主题
+		const savedTheme = localStorage.getItem("theme") || "light";
+		setTheme(savedTheme);
+		
 		const unSub = onAuthStateChanged(auth, (user) => {
 			fetchUserInfo(user?.uid);
 		});
@@ -25,7 +32,7 @@ const App = () => {
 		return () => {
 			unSub();
 		};
-	}, [fetchUserInfo, lang]);
+	}, [fetchUserInfo, lang, setTheme, i18n]);
 
 	// 加载页
 	if (isLoading) return <div className="loading">{t("loading")}</div>;

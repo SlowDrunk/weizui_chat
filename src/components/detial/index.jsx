@@ -32,6 +32,13 @@ function Detial() {
 		resetChat,
 	} = useChatStore();
 	useEffect(() => {
+		// 切换对话时，先清空旧数据
+		setChats(null);
+		setPhotos([]);
+		setShowPhotos(false);
+
+		if (!chatId) return;
+
 		const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
 			setChats(res.data());
 		});
@@ -42,7 +49,7 @@ function Detial() {
 	}, [chatId]);
 
 	useEffect(() => {
-		if (chats) {
+		if (chats && chats.messages) {
 			const photos = chats.messages
 				.filter((ele) => ele.img)
 				.map((message) => {
@@ -52,7 +59,7 @@ function Detial() {
 					};
 				});
 			setPhotos(photos || []);
-			setShowPhotos(photos.length);
+			setShowPhotos(photos.length > 0);
 		}
 	}, [chats]);
 
@@ -81,11 +88,7 @@ function Detial() {
 			<div className="user">
 				<img src={user.avatar ? user.avatar : "./avatar.png"} alt="" />
 				<h2>{user.username}</h2>
-				<p
-					style={{
-						color: user.signature ? "#ffffff" : "#cccccc",
-					}}
-				>
+				<p>
 					{user.signature ? user.signature : t("signature")}
 				</p>
 			</div>

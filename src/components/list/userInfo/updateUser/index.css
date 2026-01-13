@@ -1,8 +1,10 @@
 .update-user {
 	width: 40%;
+	max-width: 500px;
 	height: max-content;
-	background-color: rgba(17, 25, 40, 0.781);
-	border-radius: 10px;
+	background-color: var(--secondaryBg);
+	border: 1px solid var(--border);
+	border-radius: 12px;
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -13,19 +15,25 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 80px;
+	gap: 40px;
 	z-index: 1000;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	transition: background-color 0.3s ease, border-color 0.3s ease;
+
 	.close-icon {
 		position: absolute;
 		top: 20px;
 		right: 30px;
 		cursor: pointer;
 		opacity: 0.6;
+		color: var(--primaryText);
 		transition: all 0.3s ease-in-out;
+
 		&:hover {
 			opacity: 1;
 		}
 	}
+
 	.item {
 		width: 100%;
 		display: flex;
@@ -43,12 +51,22 @@
 
 			input {
 				width: 100%;
-				padding: 20px;
-				border: none;
+				padding: 14px 16px;
+				border: 1px solid var(--inputBorder);
 				outline: none;
-				background-color: rgba(17, 25, 40, 0.6);
-				color: white;
-				border-radius: 5px;
+				background-color: var(--inputBg);
+				color: var(--primaryText);
+				border-radius: 8px;
+				font-size: 14px;
+				transition: border-color 0.2s ease, background-color 0.3s ease;
+
+				&:focus {
+					border-color: var(--buttonPrimary);
+				}
+
+				&::placeholder {
+					color: var(--tertiaryText);
+				}
 			}
 
 			label {
@@ -58,6 +76,7 @@
 				justify-content: space-between;
 				cursor: pointer;
 				text-decoration: underline;
+				color: var(--primaryText);
 
 				img {
 					width: 50px;
@@ -65,32 +84,47 @@
 					border-radius: 10px;
 					object-fit: cover;
 					opacity: 0.6;
+					border: 1px solid var(--border);
 				}
 			}
+
 			.button-box {
 				width: 100%;
 				display: flex;
 				flex-direction: row;
-				gap: 20px;
+				gap: 16px;
+
 				button {
-					width: 100%;
-					padding: 16px;
+					flex: 1;
+					padding: 14px;
 					border: none;
-					background-color: #1f8ef1;
+					background-color: var(--buttonPrimary);
 					color: white;
-					border-radius: 5px;
+					border-radius: 8px;
 					cursor: pointer;
 					font-weight: 500;
+					font-size: 14px;
+					transition: background-color 0.2s ease;
+
+					&:hover:not(:disabled) {
+						background-color: var(--buttonHover);
+					}
 
 					&:disabled {
 						cursor: not-allowed;
-						background-color: #1f8ff19c;
+						opacity: 0.6;
 					}
+
 					&:nth-child(2) {
-						background-color: #bb3906;
+						background-color: #ff4d4f;
+
+						&:hover:not(:disabled) {
+							background-color: #ff7875;
+						}
+
 						&:disabled {
 							cursor: not-allowed;
-							background-color: #e3662c9c;
+							opacity: 0.6;
 						}
 					}
 				}

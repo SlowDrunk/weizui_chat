@@ -134,14 +134,7 @@ export default function ChartList() {
 								<p>{chat.lastMessage}</p>
 							</div>
 						</div>
-						<div
-							style={{
-								fontSize: "12px",
-								color: "#ccc",
-								width: "80px",
-								textAlign: "right",
-							}}
-						>
+						<div className="time">
 							<span>{handleUpadteTime(chat.updatedAt)}</span>
 						</div>
 					</div>
