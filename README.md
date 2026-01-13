@@ -238,3 +238,9 @@ const upload = async (file) => {
 ## 总结
 
 这是一个功能完整的实时聊天应用，覆盖实时通信、多媒体、状态管理、用户体验等方面。主要难点在于实时数据同步、复杂状态管理、文件处理与权限管理。整体架构清晰，代码组织合理。
+
+
+## 项目地址
+
+https://weizuichat.web.app
+https://weizuichat.firebaseapp.com

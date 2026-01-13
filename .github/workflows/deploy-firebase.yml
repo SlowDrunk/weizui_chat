@@ -30,6 +30,7 @@ jobs:
       - name: Build project
         run: pnpm run build
         env:
+          NODE_ENV: production
           VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
 
       - name: Deploy to Firebase Hosting
